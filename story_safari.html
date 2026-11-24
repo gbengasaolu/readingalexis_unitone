@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Story Safari – Grade 3 Reading Mastery Camp</title>
+<meta name="description" content="Interactive Grade 3 reading practice: context clues, text purpose, story elements, affixes, character feelings, and finding text evidence.">
+<style>
+:root{
+  --jungle:#1f5c3f; --jungle-d:#143d2a; --leaf:#3ea86b; --leaf-l:#d9f2e3;
+  --sun:#f6b73c; --sun-d:#c98a12; --clay:#d9683b; --clay-d:#a94a24;
+  --cream:#fff9ea; --sand:#f4e4bc; --sand-d:#e2c98a; --ink:#2b2117;
+  --sky:#d5eef4; --berry:#7d4fbf; --berry-l:#ece2fa; --blue:#2f84b8; --red:#d6453d;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; color:var(--ink); min-height:100vh;
+  font-family:"Trebuchet MS","Segoe UI","Comic Sans MS",system-ui,sans-serif;
+  font-size:18px; line-height:1.55;
+  background:linear-gradient(180deg,var(--sky) 0,#eaf6e6 260px,var(--sand) 100%) fixed;
+}
+button{font-family:inherit}
+.deco{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.deco span{position:absolute;opacity:.16;font-size:2.6rem;animation:bob 5s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(4deg)}}
+
+header{
+  position:relative;z-index:2;text-align:center;padding:26px 16px 10px;
+}
+header h1{
+  margin:0;font-size:clamp(1.9rem,5.4vw,3.1rem);color:var(--jungle-d);letter-spacing:.5px;
+  text-shadow:3px 3px 0 var(--sun);
+}
+header p{margin:6px 0 0;color:var(--jungle);font-weight:bold}
+
+nav{
+  position:sticky;top:0;z-index:60;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+  padding:10px 10px 12px;background:rgba(255,249,234,.95);backdrop-filter:blur(4px);
+  box-shadow:0 4px 12px rgba(43,33,23,.12);
+}
+nav button{
+  border:0;border-radius:30px;padding:9px 15px;font-weight:bold;font-size:.9rem;cursor:pointer;
+  background:var(--sand-d);color:var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.18);transition:transform .12s;
+}
+nav button:hover{transform:translateY(-2px);background:var(--sun)}
+nav button.active{background:var(--jungle);color:#fff;box-shadow:0 3px 0 var(--jungle-d)}
+
+main{position:relative;z-index:2;max-width:960px;margin:0 auto;padding:14px 14px 60px}
+.page{display:none;animation:fade .35s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.panel{
+  background:var(--cream);border:4px solid var(--sand-d);border-radius:22px;padding:22px;margin-bottom:22px;
+  box-shadow:0 8px 20px rgba(43,33,23,.12);
+}
+h2{margin:0 0 10px;color:var(--jungle-d);font-size:1.55rem}
+h3{margin:14px 0 6px;color:var(--jungle)}
+p{margin:.5em 0}
+
+/* mascot */
+.mascot{display:flex;gap:14px;align-items:flex-start;margin:10px 0}
+.mascot .face{font-size:3rem;line-height:1;flex-shrink:0}
+.bubble{
+  background:#fff;border:3px solid var(--sun);border-radius:18px;padding:12px 16px;position:relative;font-size:1.02rem;
+}
+.bubble:before{content:"";position:absolute;left:-12px;top:18px;border:8px solid transparent;border-right-color:var(--sun);border-left:0}
+
+/* buttons */
+.btn{
+  border:0;border-radius:30px;padding:11px 22px;font-weight:bold;font-size:1rem;cursor:pointer;color:#fff;
+  background:var(--clay);box-shadow:0 4px 0 var(--clay-d);transition:transform .12s;margin:4px;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--clay-d)}
+.btn.green{background:var(--leaf);box-shadow:0 4px 0 #2b8250}
+.btn.blue{background:var(--blue);box-shadow:0 4px 0 #1f5f87}
+.btn.purple{background:var(--berry);box-shadow:0 4px 0 #583593}
+.btn.sun{background:var(--sun);color:var(--ink);box-shadow:0 4px 0 var(--sun-d)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.center{text-align:center}
+
+/* home */
+.stats{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+.stat-big{font-size:1.5rem;font-weight:bold}
+.level-chip{background:var(--jungle);color:#fff;padding:5px 14px;border-radius:20px;font-weight:bold}
+.bar{height:20px;background:#fff;border:3px solid var(--sand-d);border-radius:14px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--leaf),#8fdcae);width:0;transition:width .6s}
+.skill-row{display:grid;grid-template-columns:44px 1fr 90px;gap:10px;align-items:center;margin:10px 0}
+.skill-row .nm{font-weight:bold;font-size:.98rem}
+.skill-row .pc{text-align:right;font-weight:bold;font-size:.9rem}
+.path{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.tile{
+  background:linear-gradient(145deg,#fff,var(--sand));border:3px solid var(--sand-d);border-radius:18px;padding:16px 12px;
+  text-align:center;cursor:pointer;box-shadow:0 5px 0 var(--sand-d);transition:transform .15s;
+}
+.tile:hover{transform:translateY(-4px)}
+.tile .em{font-size:2.3rem;display:block}
+.tile b{display:block}
+.tile small{display:block;opacity:.8;line-height:1.3;margin-top:3px}
+.badge{display:inline-block;background:var(--sun);color:var(--ink);padding:5px 12px;border-radius:18px;font-weight:bold;font-size:.85rem;margin:3px;box-shadow:0 3px 0 var(--sun-d)}
+.name-in{font:inherit;padding:8px 12px;border:3px solid var(--sand-d);border-radius:12px;width:220px;max-width:100%}
+
+/* lessons */
+.lesson-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.lesson-tabs button{
+  border:3px solid var(--sand-d);background:#fff;border-radius:16px;padding:8px 12px;font-weight:bold;cursor:pointer;font-size:.88rem;
+}
+.lesson-tabs button.active{background:var(--jungle);color:#fff;border-color:var(--jungle-d)}
+.lesson-tabs button.done:after{content:" ✅"}
+.big-idea{background:var(--leaf-l);border-left:8px solid var(--leaf);padding:12px 16px;border-radius:12px;margin:12px 0;font-size:1.08rem}
+.steps{counter-reset:s;list-style:none;padding:0;margin:12px 0}
+.steps li{counter-increment:s;background:#fff;border:3px solid var(--sand-d);border-radius:14px;padding:10px 14px 10px 54px;margin:8px 0;position:relative}
+.steps li:before{content:counter(s);position:absolute;left:12px;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;background:var(--clay);color:#fff;font-weight:bold;display:flex;align-items:center;justify-content:center}
+.example{background:#fff;border:3px dashed var(--blue);border-radius:14px;padding:12px 16px;margin:12px 0}
+.example .tag{display:inline-block;background:var(--blue);color:#fff;border-radius:10px;padding:2px 10px;font-weight:bold;font-size:.8rem;margin-bottom:6px}
+.trap{background:#fdeae3;border-left:8px solid var(--clay);padding:12px 16px;border-radius:12px;margin:12px 0}
+.tbl{width:100%;border-collapse:collapse;margin:10px 0;font-size:.95rem}
+.tbl th,.tbl td{border:2px solid var(--sand-d);padding:6px 9px;text-align:left}
+.tbl th{background:var(--sand)}
+.hl{background:#fff2a8;padding:0 3px;border-radius:4px}
+.pre{color:var(--clay-d);font-weight:bold}.suf{color:var(--berry);font-weight:bold}.root{color:var(--jungle);font-weight:bold}
+
+/* question widget */
+.qwrap{margin:14px 0}
+.qtext{font-weight:bold;margin-bottom:10px}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;text-align:left;background:#fff;border:3px solid var(--sand-d);border-radius:14px;
+  padding:10px 14px;font-size:1rem;cursor:pointer;transition:background .12s,transform .1s;
+}
+.opt:hover:not(:disabled){background:var(--sand);transform:translateX(3px)}
+.opt .letter{background:var(--sand-d);border-radius:50%;width:28px;height:28px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:.85rem}
+.opt.correct{background:var(--leaf);color:#fff;border-color:#2b8250}
+.opt.wrong{background:var(--red);color:#fff;border-color:#9e2d27}
+.opt.sel{background:var(--sun);border-color:var(--sun-d)}
+.opt:disabled{cursor:default}
+.fb{margin-top:10px;padding:10px 14px;border-radius:12px;font-size:.98rem}
+.fb.good{background:#d7f5e3;color:#176340}
+.fb.bad{background:#fde1db;color:#8f3220}
+.fb.info{background:#e8f3fa;color:#1d4d6b}
+.clue{border-bottom:3px dotted transparent}
+.clue.show{background:#fff2a8;border-bottom-color:var(--clay);border-radius:4px;padding:0 2px}
+textarea.wr{width:100%;min-height:96px;font:inherit;padding:10px 12px;border:3px solid var(--sand-d);border-radius:12px;resize:vertical}
+.chips span{display:inline-block;border-radius:14px;padding:3px 11px;margin:3px;font-size:.9rem;font-weight:bold}
+.chips .y{background:#d7f5e3;color:#176340}.chips .n{background:#fde1db;color:#8f3220}
+.model{background:var(--berry-l);border-left:8px solid var(--berry);border-radius:12px;padding:10px 14px;margin-top:10px}
+
+/* passages */
+.passage{
+  background:#fffef7;border:3px solid var(--sand-d);border-radius:16px;padding:18px 22px;margin:12px 0;
+  font-family:Georgia,"Times New Roman",serif;font-size:1.12rem;line-height:1.75;
+}
+.passage .ptitle{font-family:inherit;font-weight:bold;font-size:1.25rem;text-align:center;margin-bottom:8px}
+.passage .ptype{font-family:"Trebuchet MS",sans-serif;font-size:.8rem;text-align:center;color:var(--berry);font-weight:bold;margin-bottom:6px;letter-spacing:1px;text-transform:uppercase}
+.passage p{margin:.7em 0;text-indent:1.2em}
+.passage.poem p{text-indent:0;margin:.2em 0}
+.passage.poem .stanza{margin:.9em 0}
+.passage .s{border-radius:5px;transition:background .12s}
+.passage .ln{display:block;border-radius:5px}
+.passage.pick .s:hover,.passage.pick .ln:hover{background:#ffe69a;cursor:pointer}
+.passage .picked{background:#ffd35c!important;box-shadow:0 0 0 2px var(--sun-d)}
+.passage .right-line{background:#8fdcae!important}
+.passage .wrong-line{background:#f6b5ac!important}
+.passage-tools{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}
+.small-btn{border:2px solid var(--blue);color:var(--blue);background:#fff;border-radius:12px;padding:4px 12px;font-weight:bold;cursor:pointer;font-size:.88rem}
+.small-btn:hover{background:var(--blue);color:#fff}
+.stepper{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.pill{background:var(--berry-l);color:var(--berry);border-radius:14px;padding:2px 12px;font-weight:bold;font-size:.82rem}
+.lvl{font-size:.78rem;font-weight:bold;color:#fff;border-radius:10px;padding:1px 9px;margin-left:6px}
+.lvl1{background:var(--leaf)}.lvl2{background:var(--sun-d)}.lvl3{background:var(--clay)}
+
+.lab-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.pcard{background:#fff;border:3px solid var(--sand-d);border-radius:16px;padding:14px;cursor:pointer;transition:transform .15s}
+.pcard:hover{transform:translateY(-3px)}
+.pcard .em{font-size:2rem}
+.pcard b{display:block}
+.pcard small{opacity:.8}
+.pcard.done{border-color:var(--leaf);background:#f1fbf4}
+
+/* games */
+.game-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.game-tabs button{border:3px solid var(--sand-d);background:#fff;border-radius:16px;padding:8px 12px;font-weight:bold;cursor:pointer;font-size:.88rem}
+.game-tabs button.active{background:var(--clay);color:#fff;border-color:var(--clay-d)}
+.scorebar{display:flex;justify-content:space-between;font-weight:bold;margin-bottom:8px;flex-wrap:wrap}
+.ord{list-style:none;padding:0;margin:10px 0}
+.ord li{display:flex;gap:10px;align-items:center;background:#fff;border:3px solid var(--sand-d);border-radius:14px;padding:8px 12px;margin:8px 0}
+.ord li.good{border-color:var(--leaf);background:#eefaf2}
+.ord li.bad{border-color:var(--red);background:#fdecea}
+.ord .n{background:var(--blue);color:#fff;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-weight:bold;flex-shrink:0}
+.ord .tx{flex:1}
+.ord .mv{display:flex;flex-direction:column;gap:2px}
+.ord .mv button{border:2px solid var(--sand-d);background:var(--sand);border-radius:8px;cursor:pointer;font-size:.8rem;padding:0 8px}
+.ord .mv button:hover{background:var(--sun)}
+.chips-pick{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chips-pick button{border:3px solid var(--sand-d);background:#fff;border-radius:16px;padding:6px 14px;font-weight:bold;cursor:pointer;font-size:1rem}
+.chips-pick button.on{background:var(--sun);border-color:var(--sun-d)}
+.lab-out{background:#fff;border:3px solid var(--leaf);border-radius:16px;padding:14px;text-align:center;min-height:110px}
+.lab-out .big{font-size:2rem;font-weight:bold}
+.mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:640px;margin:0 auto}
+@media(max-width:560px){.mem-grid{grid-template-columns:repeat(3,1fr)}.skill-row{grid-template-columns:34px 1fr 64px}}
+.mem{min-height:84px;background:var(--jungle);color:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:bold;cursor:pointer;padding:6px;font-size:.92rem;box-shadow:0 4px 0 var(--jungle-d);user-select:none}
+.mem.up{background:#fff;color:var(--ink);box-shadow:0 2px 0 var(--sand-d);border:3px solid var(--sand-d)}
+.mem.ok{background:var(--leaf);color:#fff;opacity:.75}
+
+/* test */
+.test-card{background:#fff;border:3px solid var(--sand-d);border-radius:16px;padding:14px 16px;margin:14px 0}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:10px 0}
+.res{background:#fff;border:3px solid var(--sand-d);border-radius:14px;padding:10px;text-align:center}
+.res b{font-size:1.4rem;display:block}
+.cert{
+  border:8px double var(--sun-d);background:#fffdf2;border-radius:16px;padding:26px;text-align:center;margin:16px 0;
+}
+.cert h2{font-size:2rem;color:var(--sun-d)}
+.cert .nm{font-size:2rem;font-weight:bold;color:var(--jungle-d);border-bottom:3px solid var(--sun);display:inline-block;padding:0 24px;margin:6px 0}
+
+.confetti{position:fixed;top:-30px;font-size:1.6rem;pointer-events:none;z-index:999;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(108vh) rotate(360deg);opacity:.3}}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--jungle-d);color:#fff;padding:10px 20px;border-radius:24px;z-index:998;font-weight:bold;box-shadow:0 6px 16px rgba(0,0,0,.3)}
+footer{position:relative;z-index:2;text-align:center;padding:18px;font-size:.85rem;opacity:.75}
+.kbd-hint{font-size:.85rem;opacity:.75}
+.parent p,.parent li{font-size:1rem}
+.parent .tbl td,.parent .tbl th{font-size:.92rem}
+@media print{
+  body{background:#fff}.deco,header,nav,footer,.noprint,.btn{display:none!important}
+  .page{display:none!important}.page.printme{display:block!important}
+  .panel{box-shadow:none;border:1px solid #999;break-inside:avoid}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="deco" id="deco"></div>
+
+<header>
+  <h1>🐆 Story Safari 🦎</h1>
+  <p>Grade 3 Reading Mastery Camp &nbsp;•&nbsp; Mid-Unit 1 Assessment Prep</p>
+</header>
+
+<nav id="nav" aria-label="Main sections">
+  <button data-p="home" class="active">🏠 Base Camp</button>
+  <button data-p="learn">📚 Learn</button>
+  <button data-p="games">🎮 Games</button>
+  <button data-p="lab">📖 Passages</button>
+  <button data-p="test">🏆 Practice Tests</button>
+  <button data-p="parent">👨‍👩‍👧 Parent Page</button>
+</nav>
+
+<main>
+  <section class="page active" id="home"></section>
+  <section class="page" id="learn"></section>
+  <section class="page" id="games"></section>
+  <section class="page" id="lab"></section>
+  <section class="page" id="test"></section>
+  <section class="page parent" id="parent"></section>
+</main>
+
+<footer>Built for curious readers. Every question here is original practice written to match the skills on the Mid-Unit 1 review sheet. Keep going – you're doing great! 🌟</footer>
+
+<script>
+/* ================= CONTENT DATA ================= */
+const SKILLS = {
+  context:{em:'🔎',name:'Word Detective (Context Clues)',color:'#2f84b8'},
+  purpose:{em:'🎯',name:'Why Was It Written? (Text Purpose)',color:'#7d4fbf'},
+  story:{em:'🏔️',name:'Story Parts (Characters, Setting, Plot)',color:'#3ea86b'},
+  affix:{em:'🧩',name:'Affix Power (Prefixes & Suffixes)',color:'#d9683b'},
+  feelings:{em:'💭',name:'Inside the Character (Thoughts, Feelings, Actions)',color:'#c98a12'},
+  evidence:{em:'📍',name:'Proof Finder (Which Line Shows It?)',color:'#1f5c3f'}
+};
+const SKILL_KEYS = Object.keys(SKILLS);
+
+/* ---------- LESSONS ---------- */
+const LESSONS = [
+{id:'context',skill:'context',em:'🔎',title:'Context Clues',
+ big:'A <b>context clue</b> is a hint hiding in the words and sentences <i>around</i> a tricky word. You don\'t need a dictionary – the sentence will help you!',
+ steps:[
+  '<b>Circle it.</b> Spot the word you don\'t know.',
+  '<b>Look around.</b> Read the whole sentence, then the sentence before and after it.',
+  '<b>Use clue words.</b> Watch for <i>means, is called, such as, like, or</i> (the word is explained) and <i>but, unlike, instead</i> (the word is the opposite).',
+  '<b>Swap and check.</b> Put your guess in place of the tricky word. Does the sentence still make sense?'],
+ ex:`<span class="tag">Example from "The Chameleon"</span><br><i>Sometimes you're yellow, then you're green, turquoise blue, or <b>tangerine</b>.</i><br>
+ Yellow, green, turquoise blue… every word in the list is a <span class="hl">color</span>. So <b>tangerine</b> must be a color too – a bright orange!`,
+ trap:'<b>Careful!</b> You may already know <i>tangerine</i> as a fruit. But the question asks what it means <b>in this poem</b>. The words around it decide – and they are all colors. Always let the text, not just your memory, vote.',
+ extra:`<h3>Four kinds of clue</h3>
+ <table class="tbl"><tr><th>Clue type</th><th>Looks like</th></tr>
+ <tr><td>Definition</td><td>A <b>cub</b> is a baby leopard. (<i>is</i> = it tells you!)</td></tr>
+ <tr><td>Example / list</td><td>He wore bright colors, <b>such as</b> red and gold.</td></tr>
+ <tr><td>Opposite</td><td>Unlike her <i>brave</i> brother, the kitten was <b>timid</b>.</td></tr>
+ <tr><td>Whole sentence</td><td>The sun was <b>scorching</b>; we hopped on the hot sand.</td></tr></table>`,
+ check:[
+  {q:'"The turtle was <b>wise</b>. He knew everything about the jungle and gave good advice." What does <b>wise</b> mean?',opts:['silly','smart and thoughtful','very small'],a:1,why:'"Knew everything" and "gave good advice" are the clues.'},
+  {q:'"Sam was <b>famished</b> after the long hike, so he ate three sandwiches." What does <b>famished</b> mean?',opts:['very hungry','very sleepy','very cold'],a:0,why:'He ate three sandwiches – the clue shows he was very hungry.'},
+  {q:'"Unlike her brave brother, the kitten was <b>timid</b>. She hid under the bed." What does <b>timid</b> mean?',opts:['shy and easily scared','loud and silly','hungry'],a:0,why:'"Unlike her brave brother" tells you timid is the opposite of brave.'}]},
+
+{id:'purpose',skill:'purpose',em:'🎯',title:'Purpose of a Text',
+ big:'The <b>purpose</b> is <i>why the author wrote it</i>. Think <b>P.I.E.</b> – <b>P</b>ersuade, <b>I</b>nform, <b>E</b>ntertain – plus one special story type: the <b>pourquoi tale</b>.',
+ steps:[
+  '<b>Look at the text type.</b> Is it a story, poem, fact article, ad, or how-to?',
+  '<b>Listen for clues.</b> Characters and events → entertain. Facts and numbers → inform. "You should…", "Best ever!" → persuade. Numbered steps → teach how-to.',
+  '<b>Match the choice.</b> Pick the answer that fits the <i>whole</i> text, not just one small part.'],
+ ex:`<span class="tag">Example from "How the Leopard Got Its Spots"</span><br>
+ <b>Pourquoi</b> (poor-KWAH) is French for <b>"why."</b> A pourquoi tale is a made-up story that explains <span class="hl">why something in nature is the way it is</span> – why leopards have spots, why owls hunt at night. The last line of the story says it: <i>"And that's how the leopard got his spots."</i>`,
+ trap:'<b>Lesson ≠ purpose!</b> The leopard story <i>does</i> teach that patience and bravery matter. That is the <b>lesson (theme)</b>. But the <b>purpose</b> of a pourquoi tale is to answer the "why" question. When a choice says <i>"answer the pourquoi question and tell a story about why…"</i>, that is the purpose.',
+ extra:`<table class="tbl"><tr><th>Purpose</th><th>Text types</th><th>Clue words</th></tr>
+ <tr><td>Entertain</td><td>stories, poems, plays</td><td>characters, dialogue, fun sounds</td></tr>
+ <tr><td>Inform</td><td>articles, science books</td><td>facts, numbers, "are", "can"</td></tr>
+ <tr><td>Persuade</td><td>ads, opinion, letters</td><td>should, must, best, "Join us!"</td></tr>
+ <tr><td>Explain why (pourquoi)</td><td>folktales</td><td>"long ago…", "that is why…"</td></tr>
+ <tr><td>Teach how-to</td><td>recipes, directions</td><td>first, next, step 1</td></tr></table>`,
+ check:[
+  {q:'"Try Crunchy Bites! They are the tastiest cereal ever, and you will love them." What is the purpose?',opts:['to entertain','to persuade you to buy it','to explain why'],a:1,why:'"Tastiest ever" and "you will love them" try to change your mind – persuade.'},
+  {q:'A story tells why the zebra has stripes. What is its purpose?',opts:['to explain why something in nature is the way it is','to give directions','to sell zebras'],a:0,why:'That is the job of a pourquoi tale.'},
+  {q:'A book has photos, facts, and a glossary about volcanoes. What is its purpose?',opts:['to persuade','to inform','to entertain with rhymes'],a:1,why:'Facts and a glossary = inform.'}]},
+
+{id:'story',skill:'story',em:'🏔️',title:'Characters, Setting & Plot',
+ big:'Every story has <b>characters</b> (who), a <b>setting</b> (where and when), and a <b>plot</b> (what happens): a <b>problem</b>, the <b>events</b> that follow, and a <b>solution</b>.',
+ steps:[
+  '<b>Characters:</b> who is in the story? Who matters most?',
+  '<b>Setting:</b> where and when? Look for place and time words (<i>long ago, jungle, by the river</i>).',
+  '<b>Problem:</b> what does the main character want or need to fix? It usually appears early.',
+  '<b>Events:</b> what does the character <i>do</i> to try to fix it, in order?',
+  '<b>Solution:</b> the thing that <i>actually fixes</i> the problem. Then ask: what lesson was learned?'],
+ ex:`<span class="tag">Story Map: "How the Leopard Got Its Spots"</span>
+ <table class="tbl">
+ <tr><th>Characters</th><td>leopard, wise old turtle, the sun (also zebra, giraffe, wild dog)</td></tr>
+ <tr><th>Setting</th><td>the jungle, by the river, a long time ago</td></tr>
+ <tr><th>Problem</th><td>The leopard is tired of being a plain cat. He wants to be special like the other animals.</td></tr>
+ <tr><th>Events</th><td>visits the turtle → goes on a journey → meets animals with designs → makes a wish → sun offers help if he is patient → he stands still in the heat</td></tr>
+ <tr><th>Solution</th><td>The sun\'s heat leaves marks – spots – on his golden fur.</td></tr>
+ <tr><th>Lesson</th><td>Being patient and brave can lead to something amazing.</td></tr></table>`,
+ trap:'<b>Advice is not the solution.</b> The turtle <i>tells</i> the leopard to go on a journey – that is an <b>event</b>. The <b>solution</b> is when the sun actually gives him spots. Ask: "Which part really fixes the problem?"',
+ extra:'<p>Picture a <b>Story Mountain</b>: start at the bottom (characters, setting, problem), climb through the events, reach the top (the big moment), then slide down to the solution at the end. 🏔️</p>',
+ check:[
+  {q:'"Last winter, in a snowy park, Ben built a snowman." What is the <b>setting</b>?',opts:['Ben','a snowy park last winter','the snowman'],a:1,why:'Setting = where and when.'},
+  {q:'Mia\'s kite blew away. She raced up the hill and grabbed the string just in time. Which part is the <b>solution</b>?',opts:['Mia\'s kite blew away.','Mia grabbed the string and saved her kite.','It was a windy day.'],a:1,why:'The solution is what fixes the problem.'},
+  {q:'The solution of a story is…',opts:['where the problem begins','how the problem gets fixed','who the characters are'],a:1,why:'Solution = how the problem is solved.'}]},
+
+{id:'affix',skill:'affix',em:'🧩',title:'Affixes: Prefixes & Suffixes',
+ big:'An <b>affix</b> is a word part added to a <b>root</b> (base word). A <b>prefix</b> goes at the <i>front</i> and changes the meaning. A <b>suffix</b> goes at the <i>end</i> and adds meaning or changes how the word is used.',
+ steps:[
+  '<b>Chop it.</b> Cover the prefix or suffix. What root word is left?',
+  '<b>Define each part.</b> What does the root mean? What does the affix mean?',
+  '<b>Put it together.</b> Say the meaning in your own words, then check it makes sense.'],
+ ex:`<span class="tag">Example from the review sheet</span><br>
+ <span class="pre">re-</span><span class="root">read</span> → <b>re-</b> means <b>again</b> (or back). So <b>reread</b> means <span class="hl">read again</span>.<br><br>
+ <span class="root">peace</span><span class="suf">-ful</span><span class="suf">-ly</span> → peace = calm; <b>-ful</b> = full of; <b>-ly</b> = in a ___ way. So <b>peacefully</b> means <span class="hl">in a calm and gentle way</span>.`,
+ trap:'Don\'t just describe the word with a feeling ("very happy"). A <b>-ly</b> word tells <i>how</i> something is done: <i>peacefully</i> = <b>in a peaceful way</b>. And <b>re-</b> means <i>again</i> – so <i>reread</i> means <b>read again</b> (not just "go back").',
+ extra:`<h3>Affix cheat sheet</h3>
+ <table class="tbl"><tr><th>Prefix</th><th>Meaning</th><th>Examples</th></tr>
+ <tr><td class="pre">re-</td><td>again / back</td><td>reread, rewrite, replay, retell</td></tr>
+ <tr><td class="pre">un-</td><td>not / opposite</td><td>unhappy, unfair, unlock</td></tr>
+ <tr><td class="pre">pre-</td><td>before</td><td>preview, pretest, prepay</td></tr>
+ <tr><td class="pre">dis-</td><td>not / opposite</td><td>dislike, disagree, disappear</td></tr>
+ <tr><td class="pre">mis-</td><td>wrongly</td><td>misspell, misread, misplace</td></tr></table>
+ <table class="tbl"><tr><th>Suffix</th><th>Meaning</th><th>Examples</th></tr>
+ <tr><td class="suf">-ful</td><td>full of</td><td>careful, joyful, helpful</td></tr>
+ <tr><td class="suf">-less</td><td>without</td><td>hopeless, fearless, careless</td></tr>
+ <tr><td class="suf">-ly</td><td>in a ___ way</td><td>quickly, gently, bravely</td></tr>
+ <tr><td class="suf">-ness</td><td>state of being</td><td>kindness, sadness, darkness</td></tr>
+ <tr><td class="suf">-able</td><td>able to be</td><td>readable, breakable, washable</td></tr></table>
+ <p>Spelling tip: when a word ends in <b>y</b>, change it to <b>i</b> before adding <b>-ly</b> or <b>-ness</b> (happy → <b>happ<u>i</u>ly</b>).</p>`,
+ check:[
+  {q:'What does <b>unfair</b> mean?',opts:['not fair','very fair','fair again'],a:0,why:'un- means not.'},
+  {q:'In <b>hopeless</b>, what does the suffix <b>-less</b> mean?',opts:['full of','without','again'],a:1,why:'-less means without, so hopeless = without hope.'},
+  {q:'What does <b>gently</b> mean?',opts:['in a gentle way','full of gentle','not gentle'],a:0,why:'-ly means "in a ___ way."'}]},
+
+{id:'feelings',skill:'feelings',em:'💭',title:'Thoughts, Feelings & Actions',
+ big:'Authors rarely say "she felt scared." They <b>show</b> you! Look at what a character <b>says</b>, <b>does</b>, and <b>thinks</b> – those clues tell you how the character <b>feels</b> and what the character is like.',
+ steps:[
+  '<b>Find the problem.</b> What is the character facing?',
+  '<b>Collect the clues.</b> What does the character say? do? think?',
+  '<b>Name the feeling or trait.</b> Use a precise word: <i>proud, embarrassed, determined</i> – not just "good" or "bad."',
+  '<b>Check the response.</b> What did the character DO about the problem? That shows how they respond.'],
+ ex:`<span class="tag">Example from the leopard story</span><br>
+ <b>Action:</b> <i>"Instead of running away, he stood still."</i> → he is <span class="hl">patient and brave</span>.<br>
+ <b>Thought:</b> <i>"Now I am special, just like I wished."</i> + <b>Words:</b> <i>"he was proud of them"</i> → at the end he feels <span class="hl">proud</span>.`,
+ trap:'<b>Check the whole text!</b> One answer choice said the leopard felt <i>mad that the sun burned him</i>. But the story says he <b>allowed</b> the sun\'s rays to touch his fur and he was <b>amazed</b> and <b>proud</b>. Wrong choices often grab one small detail.',
+ extra:`<h3>Feeling words (use these in your writing!)</h3>
+ <table class="tbl">
+ <tr><td>😀 Happy</td><td>proud, delighted, joyful, amazed, cheerful</td></tr>
+ <tr><td>😢 Sad</td><td>disappointed, lonely, embarrassed, discouraged</td></tr>
+ <tr><td>😠 Mad</td><td>angry, frustrated, annoyed</td></tr>
+ <tr><td>😨 Scared</td><td>nervous, worried, timid</td></tr>
+ <tr><td>💪 Traits (lasting)</td><td>brave, patient, curious, determined, kind, clever</td></tr></table>
+ <p><b>Feeling</b> = changes during the story. <b>Trait</b> = what the character is like most of the time.</p>`,
+ check:[
+  {q:'Dana\'s hands shook. She hid behind her mom when the big dog barked. How did Dana feel?',opts:['scared','proud','bored'],a:0,why:'Shaking and hiding are scared clues.'},
+  {q:'Leo stomped his feet and slammed the door. How did Leo feel?',opts:['calm','frustrated and angry','sleepy'],a:1,why:'Stomping and slamming show anger.'},
+  {q:'Ana practiced piano daily even when her fingers hurt. Which trait fits?',opts:['lazy','determined','shy'],a:1,why:'She keeps trying – that is determined.'}]},
+
+{id:'evidence',skill:'evidence',em:'📍',title:'Proof Finder: Text Evidence',
+ big:'Many test questions come in <b>two parts</b>: Part A asks a question; Part B asks <b>"Which line proves it?"</b> The best proof is the line that <i>directly shows</i> your answer – not a line that merely mentions the same topic.',
+ steps:[
+  '<b>Answer Part A first</b> using what you know from the text.',
+  '<b>Go back and find it.</b> Put your finger on the exact lines.',
+  '<b>Test each line:</b> If I read just this line, would it prove my answer? Pick the strongest.',
+  '<b>Say it:</b> "The text says…" and copy the words.'],
+ ex:`<span class="tag">Example from "The Chameleon"</span><br>
+ <b>Part A:</b> Why does the poet say "we never know what skin you\'re in"? → Chameleons change colors.<br>
+ <b>Part B:</b> Which line proves it? <span class="hl">"Sometimes you\'re yellow, / Then you\'re green."</span><br>
+ Not <i>"Chameleon, comedian"</i> (that\'s a name) and not <i>"Chameleon you\'re hard to find"</i> (that\'s about hiding). Only the yellow-to-green line <b>shows the change</b>.`,
+ trap:'A line can be <b>true</b> and still be <b>wrong proof</b>. Ask "Does this line show my answer, or just sit near it?"',
+ extra:`<h3>Write a strong answer with A.C.E.</h3>
+ <ul><li><b>A – Answer</b> the question in a full sentence. Use words from the question.</li>
+ <li><b>C – Cite</b> proof: <i>The text says, "…".</i></li>
+ <li><b>E – Explain</b> how the proof shows your answer: <i>This shows that…</i></li></ul>
+ <div class="example"><span class="tag">Model answer – "What is the problem in the story?"</span><br>
+ <b>A:</b> The problem in the story is that the leopard is tired of being a plain cat and wants to be special.
+ <b>C:</b> The text says, "He wanted to be special like the other jungle animals."
+ <b>E:</b> This shows he wants spots or markings like the other animals have.</div>`,
+ check:[
+  {q:'Claim: <i>The fox is clever.</i> Which detail best proves it?',opts:['The fox lived in the woods.','The fox tricked the crow into dropping the cheese.','The fox was orange.'],a:1,why:'Tricking the crow shows cleverness.'},
+  {q:'In a two-part question, Part B should…',opts:['prove your Part A answer','change your answer','talk about something different'],a:0,why:'Part B asks for the line that proves Part A.'},
+  {q:'Which line from "The Chameleon" proves chameleons change color?',opts:['Chameleon, comedian','Sometimes you\'re yellow, / Then you\'re green.','Comedian, make up your mind!'],a:1,why:'Yellow then green shows a change.'}]},
+
+{id:'playbook',skill:null,em:'🛡️',title:'Test-Day Playbook',
+ big:'Smart test-takers have a routine. Use these seven steps on every passage and you will stay calm and accurate.',
+ steps:[
+  '<b>Read the passage twice.</b> First for the story. Second to notice details. Underline names, problems, and feeling clues.',
+  '<b>Read each question slowly.</b> Circle the key word: <i>problem, solution, purpose, feel, mean, line</i>.',
+  '<b>Predict.</b> Try to answer in your head <i>before</i> looking at the choices.',
+  '<b>Cross out</b> choices that are clearly wrong. Look out for the traps below.',
+  '<b>Two-part questions:</b> make sure Part B truly proves Part A.',
+  '<b>Written answers:</b> use A.C.E. and finish with a period and capital letters.',
+  '<b>Check.</b> Reread the question. Does your answer match what is asked? Take a deep breath – you\'ve got this.'],
+ ex:`<span class="tag">Common wrong-answer traps</span><br>
+ 🪤 <b>True but not the answer</b> – it happened in the story, but doesn\'t answer <i>this</i> question.<br>
+ 🪤 <b>Too small</b> – only one detail instead of the main idea.<br>
+ 🪤 <b>Opposite</b> – says the reverse of the text.<br>
+ 🪤 <b>Real-life memory</b> – true in real life but not what this text says.`,
+ trap:'',extra:'',check:[]}
+];
+
+/* ---------- DRILLS ---------- */
+const DRILLS = {
+context:{title:'Context Detective',skill:'context',em:'🔎',desc:'Use the clues to crack the meaning.',items:[
+ {q:'"The leopard was <b>curious</b>. He <span class="clue">loved to explore and ask questions</span>." What does <b>curious</b> mean?',opts:['eager to learn new things','sleepy','angry'],a:0,why:'Loving to explore and ask questions shows curiosity.'},
+ {q:'"It was a <b>gigantic</b> whale, <span class="clue">bigger than the whole boat</span>." What does <b>gigantic</b> mean?',opts:['very small','very big','very fast'],a:1,why:'Bigger than the boat – huge!'},
+ {q:'"Mia was <b>exhausted</b> after the race. She <span class="clue">could barely keep her eyes open</span>." What does <b>exhausted</b> mean?',opts:['very tired','very silly','very hungry'],a:0,why:'Barely keeping eyes open = very tired.'},
+ {q:'"The cave was <b>dim</b>, so <span class="clue">we needed flashlights to see</span>." What does <b>dim</b> mean?',opts:['full of bright light','not bright; hard to see','very noisy'],a:1,why:'Needing flashlights means it was not bright.'},
+ {q:'"He gave a <b>feeble</b> push, <span class="clue">too weak to move the door</span>." What does <b>feeble</b> mean?',opts:['strong','weak','quick'],a:1,why:'The clue says "too weak."'},
+ {q:'"The baby was <b>delighted</b>, <span class="clue">laughing and clapping her hands</span>." What does <b>delighted</b> mean?',opts:['very happy','very sad','very sleepy'],a:0,why:'Laughing and clapping show joy.'},
+ {q:'"The library was <b>hushed</b>; <span class="clue">no one said a word</span>." What does <b>hushed</b> mean?',opts:['loud','very quiet','crowded'],a:1,why:'No one said a word = very quiet.'},
+ {q:'"The path was <b>treacherous</b>, <span class="clue">full of slippery rocks and deep holes</span>." What does <b>treacherous</b> mean?',opts:['dangerous','pretty','short'],a:0,why:'Slippery rocks and holes are dangerous.'},
+ {q:'"Ben\'s room was <b>spotless</b>, <span class="clue">with not one sock on the floor</span>." What does <b>spotless</b> mean?',opts:['very messy','very clean','very small'],a:1,why:'Nothing out of place = very clean.'},
+ {q:'"The sun was <b>scorching</b>. <span class="clue">The sand was so hot we hopped on our toes.</span>" What does <b>scorching</b> mean?',opts:['very hot','very cold','very bright blue'],a:0,why:'Hot sand clue.'},
+ {q:'"Grandpa <b>chuckled</b> softly <span class="clue">at the funny joke</span>." What does <b>chuckled</b> mean?',opts:['cried loudly','laughed quietly','walked away'],a:1,why:'A funny joke + softly = laughed quietly.'},
+ {q:'"Sometimes you\'re yellow, then you\'re green, turquoise blue, or <b>tangerine</b>." What does <b>tangerine</b> mean in this poem?',opts:['a fruit','a color','an action word'],a:1,why:'It is in a list of colors.'},
+ {q:'"Unlike his <span class="clue">noisy</span> brother, Tom was <b>placid</b>; <span class="clue">he sat quietly and read</span>." What does <b>placid</b> mean?',opts:['calm and peaceful','wild and loud','sick'],a:0,why:'"Unlike noisy" and "sat quietly" show calm.'}
+]},
+purpose:{title:'Purpose Sorter',skill:'purpose',em:'🎯',desc:'Why did the author write it?',items:(function(){
+ const O=['Entertain','Inform','Persuade','Explain why (pourquoi)','Teach how-to'];
+ const m=(t,a,w)=>({q:'<i>'+t+'</i><br>What is the author\'s purpose?',opts:O,a:a,why:w});
+ return [
+ m('Once there was a bear who was afraid of honeybees. Every time one buzzed by, he dove into a bush!',0,'A fun story with a character – entertain.'),
+ m('Penguins live in the Southern Hemisphere. They eat fish and krill.',1,'Facts – inform.'),
+ m('You should read for twenty minutes every night. It is the best way to become a great reader!',2,'"Should" and "best" are persuasion words.'),
+ m('Long ago, the moon was close enough to touch. A boy reached for it, and the moon floated up, up, up. That is why the moon is so high today.',3,'A made-up story explaining why – pourquoi.'),
+ m('To make a paper airplane, first fold the paper in half lengthwise. Next, fold the top corners to the middle.',4,'Steps with first and next – a how-to.'),
+ m('Pitter-patter, drip-drop rain, dancing on my windowpane.',0,'A playful poem – entertain.'),
+ m('Every kid needs a bike helmet. Wear one on every ride – it could save your life!',2,'It tries to convince you – persuade.'),
+ m('A caterpillar changes into a butterfly in four stages: egg, larva, pupa, and adult.',1,'Facts about nature – inform.'),
+ m('Long ago, Bat refused to help build the forest. As a result, the trees held him upside down. That is why bats hang from branches.',3,'Explains why bats hang upside down – pourquoi.'),
+ m('Step 1: Fill a cup with soil. Step 2: Push a bean seed into the soil. Step 3: Add a little water.',4,'Numbered steps – how-to.'),
+ m('Our town library is the BEST place to spend a Saturday. Come visit and you will love it!',2,'"Best" and "you will love it" – persuade.'),
+ m('"Zip! Zap!" went Fox. "You can\'t catch me!" he laughed as he dashed across the field.',0,'Characters and dialogue – entertain.')];})()},
+parts:{title:'Story Parts Sorter',skill:'story',em:'🏔️',desc:'Sort the clue into the right story part.',items:(function(){
+ const O=['Character','Setting','Problem','Solution','Lesson'];
+ const m=(t,a,w)=>({q:'<i>'+t+'</i><br>Which story part is this?',opts:O,a:a,why:w});
+ return [
+ m('the wise old turtle',0,'A who – character.'),
+ m('the jungle, a long time ago',1,'Where and when – setting.'),
+ m('The leopard is tired of being plain and wants to be special.',2,'What he wants to fix – problem.'),
+ m('The sun\'s heat leaves spots on the leopard\'s fur.',3,'This fixes the problem – solution.'),
+ m('Being patient and brave can lead to something amazing.',4,'The takeaway – lesson.'),
+ m('The day birds giggle at the owl\'s scratchy voice.',2,'This is what upsets the owl – problem.'),
+ m('a quiet forest long ago',1,'Place and time – setting.'),
+ m('The moon invites the owl to sing at night, and he feels proud.',3,'This fixes the owl\'s sadness – solution.'),
+ m('the moon',0,'A who – character.'),
+ m('In the dry season, the leaves were too high for Giraffe to reach.',2,'Giraffe cannot get food – problem.'),
+ m('Small efforts add up – keep trying.',4,'Takeaway message – lesson.'),
+ m('the golden grassland',1,'A place – setting.'),
+ m('Giraffe stretches each morning until her neck grows long.',3,'This solves the problem – solution.'),
+ m('Elephant',0,'A who – character.'),
+ m('At the start, a girl cannot find her lost puppy.',2,'The thing she must fix – problem.')];})()},
+feelings:{title:'Feelings & Traits',skill:'feelings',em:'💭',desc:'What do the actions tell you?',items:[
+ {q:'Mia\'s hands shook, and she hid behind her mom when the big dog barked. How did Mia feel?',opts:['scared','proud','bored'],a:0,why:'Shaking and hiding = scared.'},
+ {q:'Leo stomped his feet and slammed the door. How did Leo feel?',opts:['calm','angry','sleepy'],a:1,why:'Stomping and slamming show anger.'},
+ {q:'Ana practiced piano every day, even when her fingers hurt. Which word describes Ana?',opts:['determined','lazy','careless'],a:0,why:'She keeps going – determined.'},
+ {q:'Tom shared his lunch with a new student who had none. Tom is…',opts:['selfish','kind','scared'],a:1,why:'Sharing shows kindness.'},
+ {q:'Priya\'s smile stretched across her face as she held up the trophy. She felt…',opts:['proud','lonely','worried'],a:0,why:'A big smile with a trophy = proud.'},
+ {q:'The leopard stood still in the hot sun instead of running away. This shows he is…',opts:['patient','impatient','lazy'],a:0,why:'He waited even though it was hard – patient.'},
+ {q:'Jake\'s shoulders slumped as his balloon floated away. He felt…',opts:['disappointed','excited','curious'],a:0,why:'Slumped shoulders show disappointment.'},
+ {q:'Eli asked questions about every plant and bug he found. Eli is…',opts:['curious','bored','scared'],a:0,why:'Asking questions shows curiosity.'},
+ {q:'"I can do this!" said Nora, climbing the tall rock wall though her knees wobbled. Nora is…',opts:['brave','careless','sleepy'],a:0,why:'She does it even though she is nervous – brave.'},
+ {q:'The owl hid at the top of an oak tree, feeling alone and unhappy. How did the owl feel?',opts:['lonely and sad','excited','angry at the moon'],a:0,why:'"Alone and unhappy" = lonely and sad.'},
+ {q:'At first the heat was strong. But the leopard stood still. How does the leopard respond to the problem?',opts:['He gives up and runs.','He stays calm and patient.','He blames the sun.'],a:1,why:'He stays and waits – calm and patient.'},
+ {q:'The boy tripped in front of the class, and his cheeks turned red. He felt…',opts:['embarrassed','excited','sleepy'],a:0,why:'Red cheeks after tripping = embarrassed.'}
+]},
+proof:{title:'Proof Finder',skill:'evidence',em:'📍',desc:'Pick the line that truly proves the claim.',items:[
+ {q:'Claim: <b>Giraffe does not give up.</b> Which line proves it?',opts:['Giraffe was very hungry.','Some days her neck ached, and her friends laughed. But she kept trying.','Old Elephant had walked the grassland for many years.'],a:1,why:'"She kept trying" shows she did not quit.'},
+ {q:'Claim: <b>The owl was sad.</b> Which line proves it?',opts:['The owl lived in a quiet forest.','He flew to the top of an old oak tree and hid there, feeling lonely and unhappy.','The moon rose, round and silver.'],a:1,why:'"Lonely and unhappy" names the feeling.'},
+ {q:'Claim: <b>The leopard is curious.</b> Which line proves it?',opts:['Their fur was golden and smooth.','They loved to explore the jungle.','The turtle knew everything.'],a:1,why:'Loving to explore shows curiosity.'},
+ {q:'Claim: <b>The octopus is good at hiding.</b> Which lines prove it?',opts:['You squeeze through tiny cracks, / You hide where no one sees.','Teach me your tricks, please!','Octopus, magician,'],a:0,why:'Squeezing into cracks and hiding where no one sees.'},
+ {q:'Claim: <b>The snail is not in a hurry.</b> Which line proves it?',opts:['You carry your house upon your back','You never rush, you never race.','Leaving a shiny trail.'],a:1,why:'"Never rush" says it directly.'},
+ {q:'Claim: <b>The sun wants to help the leopard.</b> Which line proves it?',opts:['The sun shone bright and hot in the sky.','"I can help you," said the sun.','The zebra had bold stripes.'],a:1,why:'The sun says it will help.'},
+ {q:'Claim: <b>The leopard felt proud at the end.</b> Which line proves it?',opts:['The leopard was amazed!','The spots made him unique, and he was proud of them.','At first, the heat was very strong.'],a:1,why:'It names the feeling – proud.'},
+ {q:'Claim: <b>Chameleons change color.</b> Which lines prove it?',opts:['Chameleon, comedian','Sometimes you\'re yellow, / Then you\'re green.','Comedian, make up your mind!'],a:1,why:'Yellow, then green – a change.'}
+]}
+};
+
+/* ---------- AFFIX DATA ---------- */
+const AFFIX_MEANINGS = {
+ 're-':'again / back','un-':'not / opposite','pre-':'before','dis-':'not / opposite','mis-':'wrongly',
+ '-ful':'full of','-less':'without','-ly':'in a ___ way','-ness':'state of being','-able':'able to be'
+};
+const AFFIX_WORDS = [
+ {aff:'re-',root:'read',w:'reread',m:'read again'},{aff:'re-',root:'write',w:'rewrite',m:'write again'},
+ {aff:'re-',root:'play',w:'replay',m:'play again'},{aff:'re-',root:'tell',w:'retell',m:'tell again'},{aff:'re-',root:'build',w:'rebuild',m:'build again'},
+ {aff:'un-',root:'happy',w:'unhappy',m:'not happy'},{aff:'un-',root:'fair',w:'unfair',m:'not fair'},{aff:'un-',root:'lock',w:'unlock',m:'do the opposite of lock'},{aff:'un-',root:'kind',w:'unkind',m:'not kind'},{aff:'un-',root:'safe',w:'unsafe',m:'not safe'},
+ {aff:'pre-',root:'view',w:'preview',m:'view before'},{aff:'pre-',root:'test',w:'pretest',m:'a test before'},{aff:'pre-',root:'pay',w:'prepay',m:'pay before'},
+ {aff:'dis-',root:'like',w:'dislike',m:'not like'},{aff:'dis-',root:'agree',w:'disagree',m:'not agree'},{aff:'dis-',root:'honest',w:'dishonest',m:'not honest'},
+ {aff:'mis-',root:'spell',w:'misspell',m:'spell wrongly'},{aff:'mis-',root:'read',w:'misread',m:'read wrongly'},{aff:'mis-',root:'place',w:'misplace',m:'place wrongly'},
+ {aff:'-ful',root:'care',w:'careful',m:'full of care'},{aff:'-ful',root:'joy',w:'joyful',m:'full of joy'},{aff:'-ful',root:'help',w:'helpful',m:'full of help'},{aff:'-ful',root:'peace',w:'peaceful',m:'full of peace'},{aff:'-ful',root:'thank',w:'thankful',m:'full of thanks'},
+ {aff:'-less',root:'hope',w:'hopeless',m:'without hope'},{aff:'-less',root:'care',w:'careless',m:'without care'},{aff:'-less',root:'fear',w:'fearless',m:'without fear'},{aff:'-less',root:'home',w:'homeless',m:'without a home'},
+ {aff:'-ly',root:'quick',w:'quickly',m:'in a quick way'},{aff:'-ly',root:'gentle',w:'gently',m:'in a gentle way'},{aff:'-ly',root:'slow',w:'slowly',m:'in a slow way'},{aff:'-ly',root:'loud',w:'loudly',m:'in a loud way'},{aff:'-ly',root:'brave',w:'bravely',m:'in a brave way'},{aff:'-ly',root:'peaceful',w:'peacefully',m:'in a peaceful (calm) way'},{aff:'-ly',root:'happy',w:'happily',m:'in a happy way',note:'The y changes to i.'},
+ {aff:'-ness',root:'kind',w:'kindness',m:'state of being kind'},{aff:'-ness',root:'sad',w:'sadness',m:'state of being sad'},{aff:'-ness',root:'dark',w:'darkness',m:'state of being dark'},{aff:'-ness',root:'happy',w:'happiness',m:'state of being happy',note:'The y changes to i.'},
+ {aff:'-able',root:'read',w:'readable',m:'able to be read'},{aff:'-able',root:'break',w:'breakable',m:'able to be broken'},{aff:'-able',root:'wash',w:'washable',m:'able to be washed'}
+];
+
+/* ---------- ORDERING STORIES ---------- */
+const ORDERS = {
+ leopard:{title:'How the Leopard Got Its Spots',events:[
+  'The leopard is tired of being a plain cat and wants to be special.',
+  'He visits the wise old turtle, who tells him to go on a journey.',
+  'He meets animals with special designs and makes a wish.',
+  'The sun offers to help if he is patient, and he stands still in the heat.',
+  'The sun leaves spots on his fur, and the leopard feels proud.']},
+ owl:{title:'Why the Owl Hunts at Night',events:[
+  'The day birds sing sweetly, but the owl\'s voice is scratchy.',
+  'The birds giggle, and the owl hides, feeling embarrassed.',
+  'The moon asks why he is sad and invites him to sing at night.',
+  'The owl takes a deep breath and hoots under the stars.',
+  'The owl feels proud and sings at night from then on.']},
+ giraffe:{title:'How the Giraffe Got a Long Neck',events:[
+  'In the dry season, the grass is brown and Giraffe is hungry.',
+  'She jumps but cannot reach the leaves in the tall trees.',
+  'Old Elephant tells her to stretch a little higher each day.',
+  'She stretches every morning for many seasons, and her neck grows.',
+  'She nibbles the highest leaf and her friends begin to stretch too.']}
+};
+/* ---------- PASSAGES ---------- */
+/* poem: text = [stanza[lines]]   prose: text = [paragraph[sentences]]
+   line questions use find:[substrings] resolved at load */
+const PASSAGES = [
+{id:'p-chameleon',em:'🦎',title:'The Chameleon',kind:'Poem',poem:true,from:'From your review sheet',
+ text:[["Chameleon, comedian","We never know which skin you're in.","Sometimes you're yellow,","Then you're green,","Turquoise blue, or tangerine.","Chameleon you're hard to find.","Comedian, make up your mind!"]],
+ qs:[
+ {skill:'evidence',level:1,type:'mc',q:'Why does the poet say, "we never know what skin you\'re in"?',opts:['Chameleons change colors','Chameleons change their skin','Chameleons are funny comedians'],a:0,why:'The poem lists many colors the chameleon turns, so we never know which color it will be.'},
+ {skill:'evidence',level:1,type:'mc',q:'Which line from the poem gave you your answer to number 1?',opts:['Chameleon, comedian','Sometimes you\'re yellow / Then you\'re green.','Chameleon you\'re hard to find.'],a:1,why:'Yellow then green shows the color changing.'},
+ {skill:'context',level:1,type:'mc',q:'What does <b>tangerine</b> mean in the poem?',opts:['The fruit','The color','An action word'],a:1,why:'It sits in a list with yellow, green, and turquoise blue – all colors.'},
+ {skill:'evidence',level:2,type:'line',q:'<b>Click the line</b> in the poem that shows the chameleon is hard to spot.',find:['hard to find'],why:'"Chameleon you\'re hard to find." says it directly.'},
+ {skill:'feelings',level:2,type:'mc',q:'How does the poet feel about the chameleon\'s changing colors?',opts:['Annoyed but playful','Terrified','Bored'],a:0,why:'"Make up your mind!" is a playful, slightly annoyed joke.'},
+ {skill:'purpose',level:2,type:'mc',q:'What is the purpose of this poem?',opts:['to teach facts about how chameleons change color','to entertain with playful words about a chameleon','to persuade readers to buy a pet'],a:1,why:'The humor and rhyme are there to entertain.'}
+ ]},
+{id:'p-leopard',em:'🐆',title:'How the Leopard Got Its Spots',kind:'Pourquoi Tale',from:'From your review sheet',
+ text:[
+ ["A long time ago, before leopards had spots, they were just regular cats.","Their fur was golden and smooth, with no markings at all.","Like most cats, leopards were very curious.","They loved to explore the jungle.","One day, the leopard decided he was tired of being a plain cat.","He wanted to be special like the other jungle animals.","He went to visit the wise old turtle who lived by the river.","The turtle knew everything about the jungle."],
+ ["\"Wise Turtle,\" the leopard asked, \"I want to be more than just a plain cat.","How can I stand out among the other animals in the jungle?\"","The turtle thought for a moment and then said, \"You must go on a journey to find your own special mark.","It won't be easy, but be brave and you will succeed.\""],
+ ["So, the leopard set off on an adventure to find his mark.","Along the way, he met many animals who had their own special designs.","The zebra had bold stripes, the giraffe had graceful spots, and the wild dog had been painted by nature herself.","\"I wish I could look like these beautiful creatures,\" the leopard said aloud."],
+ ["No one else was around to hear the leopard's wish except the sun who shone bright and hot in the sky.","\"I can help you,\" said the sun, \"but only if you're willing to be patient.\"","The leopard agreed, and the sun shone down brightly on him.","At first, the heat was very strong, and the leopard started to feel too warm.","But instead of running away, he stood still and allowed the sun's rays to touch his fur.","The sun's heat left marks on the leopard's golden coat.","The leopard felt a strange tingling all over his body."],
+ ["When he looked at his reflection in the river, he saw that his fur was covered in beautiful marks just like the other animals.","The leopard was amazed!","\"Now I am special, just like I wished,\" he thought.","The spots made him unique, and he was proud of them.","From that day on, every leopard born in the jungle had spots.","And the wise old turtle smiled, knowing that the leopard had learned an important lesson – that sometimes, being patient and brave can lead to something amazing.","And that's how the leopard got his spots."]],
+ qs:[
+ {skill:'story',level:2,type:'write',q:'What is the problem in the story? Use details from the text to support your answer.',
+  keys:[[['special','stand out','plain','spots','markings','design','unique','different']],[['text says','story says','"','wanted to be special','tired of being','plain cat']],[['because','shows','this means','so he','which means','this shows']]],
+  labels:['Names the problem (he wants to be special / have markings)','Uses a detail or quote from the text','Explains with because / this shows'],
+  model:'The problem in the story is that the leopard is tired of being a plain cat and wants to be special like the other jungle animals. The text says, "He wanted to be special like the other jungle animals." This shows he wants markings, like the zebra\'s stripes, to stand out.'},
+ {skill:'story',level:2,type:'mc',q:'What is the <b>solution</b> to the story?',opts:['The zebra gives the leopard spots.','The wise old turtle sends the leopard on a long journey to find his spots in the jungle.','The leopard talks to the sun and the sun gives the leopard spots.'],a:2,why:'The solution is what actually fixes the problem: the sun\'s heat leaves spots on his fur. The turtle\'s advice is an event along the way.'},
+ {skill:'purpose',level:2,type:'mc',q:'What is the purpose of this story?',opts:['To teach children a lesson about patience','To answer the pourquoi question and tell a story about why the leopard has spots','To give the reader information about leopards'],a:1,why:'Patience is the lesson (theme). The purpose of a pourquoi tale is to explain why something is the way it is.'},
+ {skill:'feelings',level:1,type:'mc',q:'How did the leopard feel at the end of the story?',opts:['He felt sad that he still didn\'t have any spots','He felt proud of his spots','He felt mad that the sun burned him'],a:1,why:'"The spots made him unique, and he was proud of them."'},
+ {skill:'affix',level:1,type:'write',q:'Re- means <i>again</i> or <i>back</i>. What does <b>reread</b> mean?',keys:[[['again']],[['read']]],labels:['Says "again"','Uses the word "read"'],model:'Reread means to read again.'},
+ {skill:'affix',level:2,type:'write',q:'If we know that <i>peace</i> means calm and gentle, what does <b>peacefully</b> mean?',keys:[[['way','manner']],[['calm','gentle','peace']]],labels:['Says "in a ___ way" (the -ly clue)','Uses calm / gentle'],model:'Peacefully means in a calm and gentle way.'},
+ {skill:'evidence',level:2,type:'line',q:'<b>Click the sentence</b> that shows the problem the leopard wants to fix.',find:['He wanted to be special like the other jungle animals.'],why:'This sentence tells what the leopard wants – the heart of the problem.'},
+ {skill:'evidence',level:3,type:'line',q:'<b>Click the sentence</b> that shows the leopard was patient.',find:['But instead of running away, he stood still'],why:'Standing still in the strong heat instead of running away shows patience.'},
+ {skill:'context',level:2,type:'mc',q:'Read: "The leopard was <b>amazed</b>! \'Now I am special, just like I wished,\' he thought." What does <b>amazed</b> mean?',opts:['very surprised and happy','very tired','a little bored'],a:0,why:'He sees his spots and says he is special – delighted surprise.'}
+ ]},
+{id:'p-octopus',em:'🐙',title:'The Octopus',kind:'Poem',poem:true,
+ text:[["Octopus, magician,","You vanish in a blink!","One moment you are scarlet,","The next, you're sea-rock pink."],["You squeeze through tiny cracks,","You hide where no one sees.","Octopus, magician,","Teach me your tricks, please!"]],
+ qs:[
+ {skill:'evidence',level:1,type:'mc',q:'Why does the poet call the octopus a "magician"?',opts:['It pulls rabbits out of hats','It seems to vanish and change colors like a magic trick','It lives in a circus'],a:1,why:'It "vanishes in a blink" and changes from scarlet to pink.'},
+ {skill:'evidence',level:1,type:'mc',q:'Which lines best support your answer to the first question?',opts:['You squeeze through tiny cracks,','One moment you are scarlet, / The next, you\'re sea-rock pink.','Teach me your tricks, please!'],a:1,why:'These lines show the color change.'},
+ {skill:'context',level:1,type:'mc',q:'What does <b>scarlet</b> mean in the poem?',opts:['a sea animal','a bright red color','a kind of magic'],a:1,why:'It is paired with pink – both are colors.'},
+ {skill:'purpose',level:1,type:'mc',q:'What is the purpose of the poem?',opts:['to persuade people to protect octopuses','to teach steps for hiding','to entertain with playful words about an octopus'],a:2,why:'It is a playful poem.'},
+ {skill:'feelings',level:2,type:'mc',q:'How does the speaker feel about the octopus?',opts:['bored','amazed and eager to learn its tricks','afraid'],a:1,why:'"Teach me your tricks, please!" shows admiration.'},
+ {skill:'evidence',level:2,type:'line',q:'<b>Click the line</b> that shows the octopus is good at hiding.',find:['You hide where no one sees.'],why:'Hiding where no one sees – direct proof.'}
+ ]},
+{id:'p-snail',em:'🐌',title:'The Snail',kind:'Poem',poem:true,
+ text:[["Snail, snail, take your time,","You never rush, you never race.","You carry your house upon your back","And glide along at your own slow pace."],["You travel through the garden gently,","Leaving a shiny trail.","Slow and steady, small and peaceful –","Oh, what a happy snail!"]],
+ qs:[
+ {skill:'context',level:2,type:'mc',q:'What does "You carry your house upon your back" mean?',opts:['The snail lives in a tiny building','The snail\'s shell is its home, and it takes it everywhere','The snail is very heavy'],a:1,why:'A snail\'s shell is like a house it carries.'},
+ {skill:'affix',level:1,type:'mc',q:'What does <b>gently</b> mean?',opts:['in a gentle way','not gentle','full of gentle'],a:0,why:'-ly means "in a ___ way."'},
+ {skill:'evidence',level:1,type:'mc',q:'Which line shows the snail is never in a hurry?',opts:['Leaving a shiny trail.','You never rush, you never race.','Oh, what a happy snail!'],a:1,why:'"Never rush" says it directly.'},
+ {skill:'affix',level:2,type:'mc',q:'Which word has a suffix meaning "full of"?',opts:['peaceful','garden','slow'],a:0,why:'peace + ful = full of peace. (The poem says "peaceful.")'},
+ {skill:'feelings',level:2,type:'mc',q:'How does the poet feel about the snail?',opts:['annoyed that it is slow','fond of it and admires its calm way','nervous about it'],a:1,why:'"Oh, what a happy snail!" shows warm feelings.'},
+ {skill:'purpose',level:1,type:'mc',q:'What is the purpose of this poem?',opts:['to entertain and share a calm feeling about a snail','to give directions for keeping a pet snail','to convince people to plant gardens'],a:0,why:'Poems like this entertain and paint a picture.'}
+ ]},
+{id:'p-owl',em:'🦉',title:'Why the Owl Hunts at Night',kind:'Pourquoi Tale',
+ text:[
+ ["Long ago, in a quiet forest, the owl lived among the day birds.","Every morning, the robin sang a sweet song.","The finch whistled, and the lark trilled high above the trees.","But when the owl tried to sing, all that came out was a loud, scratchy \"Hoo! Hoo!\""],
+ ["The other birds giggled.","The owl felt embarrassed, and his feathers drooped.","\"I will never sing again,\" he sighed.","He flew to the top of an old oak tree and hid there, feeling lonely and unhappy."],
+ ["That evening, the moon rose, glowing round and silver.","\"Why are you so sad, little owl?\" asked the moon.","\"My voice is not pretty like the others,\" said the owl.","\"The day birds laugh at me.\""],
+ ["\"Come out when the sky is dark,\" said the moon.","\"At night, the forest is still and calm.","I would love to hear your deep, gentle hoot.\"","The owl was nervous, but he took a deep breath and hooted into the night.","The stars twinkled, the crickets hummed along, and the moon smiled.","For the first time, the owl felt proud of his voice."],
+ ["From that night on, the owl chose the dark hours to sing and hunt, while the day birds slept.","And that is why owls are awake at night."]],
+ qs:[
+ {skill:'story',level:1,type:'mc',q:'What problem does the owl have?',opts:['He cannot fly','The day birds laugh at his scratchy voice, and he feels embarrassed','He is lost in the forest'],a:1,why:'The birds giggle at his voice – that is what upsets him.'},
+ {skill:'story',level:2,type:'mc',q:'What is the <b>solution</b>?',opts:['The robin teaches him a new song','The finch gives him a new voice','The moon invites him to hoot at night, and he finds courage'],a:2,why:'The moon\'s invitation leads the owl to sing at night and feel proud.'},
+ {skill:'feelings',level:1,type:'mc',q:'<b>Part A:</b> How did the owl feel after the birds giggled?',opts:['excited','embarrassed','angry'],a:1,why:'The text names the feeling directly.'},
+ {skill:'evidence',level:2,type:'line',q:'<b>Part B:</b> Click the sentence that proves your answer to Part A.',find:['The owl felt embarrassed'],why:'"The owl felt embarrassed, and his feathers drooped." names the feeling and shows it.'},
+ {skill:'context',level:2,type:'mc',q:'Read: "The owl felt embarrassed, and his feathers <b>drooped</b>." What does <b>drooped</b> mean?',opts:['stood straight up','hung down weakly','turned bright red'],a:1,why:'He is sad and embarrassed, so his feathers hang down.'},
+ {skill:'affix',level:1,type:'mc',q:'What does <b>unhappy</b> mean?',opts:['very happy','happy again','not happy'],a:2,why:'un- means not.'},
+ {skill:'purpose',level:2,type:'mc',q:'What is the purpose of this story?',opts:['to explain why owls are awake at night','to give facts about owl bodies','to persuade people to stay up late'],a:0,why:'The last line: "And that is why owls are awake at night."'},
+ {skill:'story',level:1,type:'mc',q:'Which words best describe the <b>setting</b>?',opts:['a busy city, today','a quiet forest, long ago','a desert, at noon'],a:1,why:'"Long ago, in a quiet forest…"'},
+ {skill:'feelings',level:3,type:'write',q:'How did the owl\'s feelings change from the beginning to the end of the story? Use details from the text.',
+  keys:[[['embarrass','sad','lonely','unhappy','ashamed']],[['proud']],[['moon','text says','"','for the first time','deep breath','hoot']]],
+  labels:['Says how the owl felt at the start (embarrassed / lonely / sad)','Says how he felt at the end (proud)','Uses a detail (the moon, a quote, what he did)'],
+  model:'At the beginning, the owl felt embarrassed and lonely because the day birds giggled at his voice. At the end, he felt proud. The text says, "For the first time, the owl felt proud of his voice." His feelings changed after the moon invited him to sing at night.'}
+ ]},
+{id:'p-giraffe',em:'🦒',title:'How the Giraffe Got Her Long Neck',kind:'Pourquoi Tale',
+ text:[
+ ["Long ago on the golden grassland, giraffes had short necks, no longer than a zebra's.","When the dry season came, the grass turned brown and crunchy, and there was hardly anything left to eat."],
+ ["Young Giraffe was very hungry.","High above her, the tallest trees were still covered with juicy green leaves.","She jumped as high as she could, but the leaves were far out of reach.","\"It's no use,\" she groaned."],
+ ["Old Elephant, who had walked the grassland for many years, saw her trying.","\"Don't give up so quickly,\" he rumbled.","\"Stretch a little higher each day.","Small efforts add up.\""],
+ ["So every morning, Giraffe stood on her tiptoes and stretched toward the leaves.","Some days her neck ached, and her friends laughed.","But she kept trying.","Day after day, season after season, she stretched, and little by little her neck grew longer."],
+ ["At last, one morning, Giraffe reached up and nibbled the highest, greenest leaf.","She had never tasted anything so delicious!","She told her friends, and soon they began to stretch too.","And that is why giraffes have long necks today."]],
+ qs:[
+ {skill:'story',level:1,type:'mc',q:'What is Giraffe\'s problem?',opts:['She is hungry and the leaves are too high to reach','She is lost on the grassland','She does not like green leaves'],a:0,why:'The dry season left only high leaves.'},
+ {skill:'story',level:2,type:'mc',q:'Which event is part of the <b>solution</b>?',opts:['Giraffe jumps and cannot reach the leaves','Giraffe stretches every morning until her neck grows long','Her friends laugh at her'],a:1,why:'The stretching, day after day, fixes her problem.'},
+ {skill:'feelings',level:2,type:'mc',q:'Which word best describes Giraffe?',opts:['lazy','determined','selfish'],a:1,why:'She keeps trying even when it is hard.'},
+ {skill:'evidence',level:2,type:'line',q:'<b>Click the sentence</b> that proves Giraffe is determined.',find:['But she kept trying.'],why:'"But she kept trying." – even when her neck ached and friends laughed.'},
+ {skill:'context',level:2,type:'mc',q:'Read: "She had never tasted anything so <b>delicious</b>!" What does <b>delicious</b> mean?',opts:['very tasty','very sour','very hard'],a:0,why:'She nibbled the greenest leaf after being so hungry – it tasted wonderful.'},
+ {skill:'affix',level:1,type:'mc',q:'In "Don\'t give up so <b>quickly</b>," what does <b>quickly</b> mean?',opts:['in a quick way','full of quick','not quick'],a:0,why:'-ly = in a ___ way.'},
+ {skill:'purpose',level:2,type:'mc',q:'What is the purpose of this story?',opts:['to explain why giraffes have long necks','to give directions for stretching','to persuade readers to eat leaves'],a:0,why:'Pourquoi tale – "that is why giraffes have long necks."'},
+ {skill:'story',level:3,type:'mc',q:'What lesson does the story teach?',opts:['Small efforts add up if you keep trying','Always laugh at your friends','Short necks are better'],a:0,why:'Elephant says "Small efforts add up," and Giraffe proves it.'}
+ ]},
+{id:'p-chamfacts',em:'🌿',title:'Chameleons: Masters of Color',kind:'Informational Text',
+ text:[
+ ["Chameleons are lizards that live in warm places such as rainforests and deserts.","They are famous for changing color, but many people have the reason wrong.","Most chameleons do not change color mainly to hide.","Instead, a chameleon's color often shows how it feels.","A calm chameleon may be green or brown.","An angry or scared chameleon may turn bright yellow or red.","Temperature and light can change its color, too."],
+ ["Chameleons have other amazing body parts.","Each eye can move on its own, so a chameleon can look forward and backward at the same time.","Its tongue is very long and sticky, and it can shoot out to catch an insect in a flash.","A chameleon wraps its toes around a branch and grips it tightly so it does not fall."]],
+ qs:[
+ {skill:'purpose',level:1,type:'mc',q:'What is the author\'s purpose?',opts:['to entertain with a funny story','to inform readers about chameleons','to persuade readers to adopt one'],a:1,why:'The text is full of facts.'},
+ {skill:'evidence',level:2,type:'line',q:'<b>Click the sentence</b> that tells what a chameleon\'s color often shows.',find:['often shows how it feels'],why:'"…a chameleon\'s color often shows how it feels."'},
+ {skill:'context',level:2,type:'mc',q:'What does <b>grips</b> mean in the last sentence?',opts:['lets go of','holds on tight','paints'],a:1,why:'It wraps its toes so it does not fall.'},
+ {skill:'affix',level:1,type:'mc',q:'What does <b>tightly</b> mean?',opts:['in a tight way','without tight','tight again'],a:0,why:'-ly = in a ___ way.'},
+ {skill:'evidence',level:2,type:'mc',q:'According to the text, what can a chameleon\'s eyes do?',opts:['Glow in the dark','Move on their own to look forward and backward at once','Change color'],a:1,why:'"Each eye can move on its own…"'},
+ {skill:'purpose',level:3,type:'mc',q:'Which detail shows this text is <b>not</b> a story?',opts:['It has facts about real animals.','It has a main character.','It begins with "Once upon a time."'],a:0,why:'Informational texts teach facts about the real world.'}
+ ]},
+{id:'p-garden',em:'🥕',title:'Let\'s Plant a School Garden',kind:'Persuasive Text',
+ text:[["Our school should plant a garden.","First, a garden gives students a place to learn about nature up close.","Second, fresh vegetables taste better when you grow them yourself.","Third, caring for plants teaches responsibility.","Every class could take a turn watering the seeds and pulling weeds.","A garden would also make our school yard more beautiful.","Let's ask Principal Lee to say yes today!"]],
+ qs:[
+ {skill:'purpose',level:1,type:'mc',q:'What is the author\'s purpose?',opts:['to persuade readers that the school should plant a garden','to entertain with a made-up story','to explain how seeds grow step by step'],a:0,why:'"Should," reasons, and a call to action – persuade.'},
+ {skill:'purpose',level:2,type:'mc',q:'Which words show the author wants to <b>persuade</b>?',opts:['"watering the seeds"','"Our school should plant a garden."','"Principal Lee"'],a:1,why:'"Should" tells readers what they ought to do.'},
+ {skill:'affix',level:2,type:'mc',q:'What does <b>beautiful</b> mean? (beauty + ful)',opts:['without beauty','full of beauty','beauty again'],a:1,why:'-ful means full of.'},
+ {skill:'evidence',level:3,type:'line',q:'<b>Click the sentence</b> that is the author\'s <i>opinion</i> about taste.',find:['taste better'],why:'"Taste better" is what the author believes, not a proven fact.'}
+ ]}
+];
+
+/* ---------- MOCK TESTS ---------- */
+const TESTS = {
+A:{title:'Practice Test A',em:'🔥',parts:[
+ {title:'The Firefly',kind:'Poem',poem:true,
+  text:[["Firefly, firefly, tiny spark,","You blink your lantern in the dark.","Now you shimmer, now you hide,","A golden wink on the meadow wide."],["Firefly, firefly, stay and play –","Light my way till break of day!"]],
+  qs:[
+  {skill:'evidence',type:'mc',q:'Why does the poet say the firefly blinks a "lantern"?',opts:['The firefly carries a real lantern','The firefly\'s glow flashes on and off like a small light in the dark','Fireflies are afraid of the dark'],a:1,why:'A lantern is a light, and the firefly\'s glow blinks on and off.'},
+  {skill:'evidence',type:'mc',q:'Which line from the poem best supports your answer to question 1?',opts:['Firefly, firefly, stay and play –','You blink your lantern in the dark.','Light my way till break of day!'],a:1,why:'The line itself describes the blinking light.'},
+  {skill:'context',type:'mc',q:'What does <b>shimmer</b> mean in the poem?',opts:['shine with a soft, flickering light','fall asleep','make a loud sound'],a:0,why:'Spark, blink, and golden wink are clues.'},
+  {skill:'purpose',type:'mc',q:'What is the purpose of the poem?',opts:['to explain the life cycle of a firefly','to entertain with playful words about a firefly','to persuade readers to catch fireflies'],a:1,why:'It is a playful, descriptive poem.'}]},
+ {title:'How the Crab Got Its Sideways Walk',kind:'Pourquoi Tale',
+  text:[
+  ["Long ago, crabs walked straight ahead, just like everyone else on the beach.","Crab was proud of his strong claws and his fast legs.","But he was also very careless, and he never looked where he was going."],
+  ["One morning, Crab raced down the shore so fast that he did not see the great Sea Turtle resting in the sand.","Bump! Crab crashed right into her shell.","\"Be careful!\" said the turtle.","\"You must watch your steps.\"","But Crab only laughed and scurried on."],
+  ["Later that day, he rushed straight into a pile of slippery seaweed, then into a sharp rock, and then – splash! – into a deep tide pool.","Crab was soaked and sore.","He felt ashamed of his careless running."],
+  ["Sea Turtle floated by.","\"Next time, look around,\" she said gently.","\"If you walk sideways, you can keep your eyes on everything around you.\"","Crab tried it.","Wiggling sideways, he could see the waves, the rocks, and his friends.","He never bumped into anything again."],
+  ["From that day on, every crab has walked sideways, careful and watchful.","And that is why crabs walk the way they do."]],
+  qs:[
+  {skill:'story',type:'mc',q:'What is Crab\'s problem?',opts:['He cannot swim','He never looks where he is going, so he keeps crashing','He is afraid of Sea Turtle'],a:1,why:'He is careless and keeps bumping into things.'},
+  {skill:'story',type:'mc',q:'What is the <b>solution</b>?',opts:['Crab builds a shell','The tide pool dries up','Sea Turtle tells him to walk sideways so he can see everything around him'],a:2,why:'Walking sideways lets him watch where he is going.'},
+  {skill:'affix',type:'mc',q:'What does <b>careless</b> mean?',opts:['full of care','without care','care again'],a:1,why:'-less means without.'},
+  {skill:'context',type:'mc',q:'What does <b>scurried</b> mean in "Crab only laughed and scurried on"?',opts:['slept','sang loudly','ran quickly with small steps'],a:2,why:'He had "raced" and "rushed" – scurried is quick running.'},
+  {skill:'feelings',type:'mc',q:'<b>Part A:</b> How did Crab feel after falling into the tide pool?',opts:['delighted','ashamed','bored'],a:1,why:'The text says he felt ashamed.'},
+  {skill:'evidence',type:'mc',q:'<b>Part B:</b> Which sentence proves your answer to Part A?',opts:['Crab was soaked and sore.','Sea Turtle floated by.','He felt ashamed of his careless running.'],a:2,why:'It names the feeling directly.'},
+  {skill:'purpose',type:'mc',q:'What is the purpose of this story?',opts:['to teach how to walk sideways','to explain why crabs walk sideways','to give facts about crab bodies'],a:1,why:'"And that is why crabs walk the way they do."'},
+  {skill:'feelings',type:'write',q:'How did Crab change from the beginning to the end of the story? Use details from the text.',
+   keys:[[['careless','never looked','crash','bump','rushed','raced','not look']],[['sideways','careful','watchful','look around','watch']],[['text says','"','story says']]],
+   labels:['Describes Crab at the start (careless, crashed)','Describes how he changed (careful, sideways)','Uses a detail or quote'],
+   model:'At the beginning, Crab was careless and never looked where he was going. At the end, he became careful and watchful. The text says, "every crab has walked sideways, careful and watchful." Sea Turtle\'s advice helped him change.'}]}
+]},
+B:{title:'Practice Test B',em:'⚡',parts:[
+ {title:'The Cricket',kind:'Poem',poem:true,
+  text:[["Cricket, cricket, in the grass,","You fiddle as the evenings pass.","Chirp, chirp, chirp, your tiny tune","Rises up to meet the moon."],["Cricket, cricket, sing along,","The whole dark garden hums your song."]],
+  qs:[
+  {skill:'evidence',type:'mc',q:'Why does the poet say the cricket "fiddles"?',opts:['The cricket plays a real violin','The cricket\'s chirping sounds like music','The cricket is stuck in the grass'],a:1,why:'"Fiddle" compares chirping to playing music.'},
+  {skill:'evidence',type:'mc',q:'Which line from the poem best supports your answer to question 1?',opts:['Cricket, cricket, in the grass,','Rises up to meet the moon.','Chirp, chirp, chirp, your tiny tune'],a:2,why:'This line is the cricket\'s music.'},
+  {skill:'context',type:'mc',q:'What does <b>tune</b> mean in the poem?',opts:['a kind of insect','a song or melody','a blade of grass'],a:1,why:'Chirp, sing along, and song are clues.'},
+  {skill:'purpose',type:'mc',q:'What is the purpose of this poem?',opts:['to entertain and describe a cricket\'s night music','to teach how to catch crickets','to persuade readers to go outside'],a:0,why:'It is a playful poem about the cricket\'s music.'}]},
+ {title:'Why the Rooster Crows at Sunrise',kind:'Pourquoi Tale',
+  text:[
+  ["Long ago, the sun was a shy, sleepy ball that hid behind the hills.","The animals could not tell when morning had come, so they slept too late and missed the best part of the day."],
+  ["Rooster felt unhappy.","His farm friends were always grumpy and tired.","\"Something must be done,\" he said.","He puffed out his chest and decided to wake the sun himself."],
+  ["Before dawn, Rooster climbed the tallest fence post.","He took a deep breath and cried, \"Cock-a-doodle-doo!\"","The sun did not move.","Rooster tried again, louder.","Still nothing.","But Rooster did not give up.","He crowed a third time with all of his might.","Slowly, a golden edge peeked over the hills, and the sky turned pink and orange."],
+  ["The animals woke up cheerful and thanked Rooster.","From that day on, Rooster crowed each morning to welcome the sun.","And that is why roosters crow at sunrise."]],
+  qs:[
+  {skill:'story',type:'mc',q:'What problem does Rooster notice?',opts:['The fence is too tall','The sun hides, so the animals sleep too late and feel grumpy','The farm is too noisy'],a:1,why:'The sleepy sun leaves the animals tired and grumpy.'},
+  {skill:'story',type:'mc',q:'How is the problem solved?',opts:['The animals build a clock','The sun asks Rooster to be quiet','Rooster crows until the sun finally rises'],a:2,why:'His third crow wakes the sun.'},
+  {skill:'feelings',type:'mc',q:'<b>Part A:</b> Which word best describes Rooster?',opts:['determined','lazy','shy'],a:0,why:'He keeps trying even after failing twice.'},
+  {skill:'evidence',type:'mc',q:'<b>Part B:</b> Which sentence proves your answer to Part A?',opts:['The sun did not move.','But Rooster did not give up.','The animals woke up cheerful.'],a:1,why:'Not giving up shows determination.'},
+  {skill:'affix',type:'mc',q:'What does <b>unhappy</b> mean?',opts:['not happy','happy again','very happy'],a:0,why:'un- means not.'},
+  {skill:'context',type:'mc',q:'What does <b>peeked</b> mean in "a golden edge peeked over the hills"?',opts:['fell down hard','showed a little bit at a time','ran away'],a:1,why:'The sun slowly shows its edge.'},
+  {skill:'purpose',type:'mc',q:'What is the purpose of this story?',opts:['to explain why roosters crow at sunrise','to teach how to raise chickens','to persuade readers to wake up early'],a:0,why:'"And that is why roosters crow at sunrise."'},
+  {skill:'story',type:'write',q:'What did Rooster do to solve the problem? Use details from the text.',
+   keys:[[['crow','cock-a-doodle','cried','wake the sun']],[['third','again','louder','did not give up','tried','kept']],[['text says','"','story says']]],
+   labels:['Says Rooster crowed / woke the sun','Mentions he tried more than once or did not give up','Uses a detail or quote'],
+   model:'Rooster solved the problem by crowing to wake the sun. He tried again and again, and the text says, "But Rooster did not give up." The third time, the sun peeked over the hills.'}]}
+]}
+};
+/* ================= LOGIC ================= */
+(function(){
+'use strict';
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.prototype.slice.call(r.querySelectorAll(s));
+const h=(t,c,html)=>{const e=document.createElement(t); if(c)e.className=c; if(html!=null)e.innerHTML=html; return e;};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t;}return a;};
+const LS='storySafari_v1', TOTAL=68;
+const def=()=>({name:'',stars:0,done:{},hist:{},best:{}});
+let S=def();
+try{const o=JSON.parse(localStorage.getItem(LS)||'null'); if(o) S=Object.assign(def(),o);}catch(e){}
+SKILL_KEYS.forEach(k=>{ if(!Array.isArray(S.hist[k])) S.hist[k]=[]; });
+function save(){try{localStorage.setItem(LS,JSON.stringify(S));}catch(e){}}
+function record(sk,ok){ if(!sk||!S.hist[sk])return; S.hist[sk].push(ok?1:0); if(S.hist[sk].length>20)S.hist[sk].shift(); save(); }
+function mastery(sk){ const a=S.hist[sk]; if(!a||a.length<3)return null; return Math.round(a.reduce((x,y)=>x+y,0)/a.length*100); }
+function earn(key,n){
+  if(S.done[key])return false; S.done[key]=1; S.stars=Math.min(TOTAL,S.stars+n); save();
+  confetti(14); toast('⭐ +'+n+' star'+(n>1?'s':'')+'!'); renderHome(); refreshLessonTabs(); return true;
+}
+const LEVELS=[[0,'Safari Cub 🐾'],[8,'Trail Tracker 🥾'],[20,'Story Explorer 🧭'],[35,'Reading Ranger 🌿'],[50,'Word Expert 🦉'],[64,'Safari Legend 🏆']];
+function levelOf(st){let l=LEVELS[0][1];LEVELS.forEach(x=>{if(st>=x[0])l=x[1];});return l;}
+function toast(msg){ const t=h('div','toast',msg); document.body.appendChild(t); setTimeout(()=>t.remove(),1800); }
+function confetti(n){
+  const em=['🐆','⭐','🦎','🌿','✨','🦉','📚'];
+  for(let i=0;i<n;i++){ const e=h('div','confetti',em[Math.floor(Math.random()*em.length)]);
+    e.style.left=Math.random()*100+'vw'; e.style.animationDuration=(2+Math.random()*2)+'s'; document.body.appendChild(e); setTimeout(()=>e.remove(),4200); }
+}
+(function deco(){ const d=$('#deco'); const e=['🌿','🐆','🦎','🐢','🦉','🌴','🦒','🍃'];
+  for(let i=0;i<9;i++){const s=h('span',null,e[i%e.length]); s.style.top=(Math.random()*88)+'%'; s.style.left=(Math.random()*94)+'%'; s.style.animationDelay=(-Math.random()*5)+'s'; d.appendChild(s);} })();
+
+/* ---- resolve line questions ---- */
+PASSAGES.forEach(p=>{ const flat=[].concat.apply([],p.text); p.qs.forEach(q=>{ if(q.type==='line'){ q.lines=flat.map((t,i)=>q.find.some(f=>t.indexOf(f)>=0)?i:-1).filter(i=>i>=0); if(!q.lines.length)console.error('No line match',p.id,q.find); }}); });
+
+/* ---- navigation ---- */
+function go(p){
+  try{window.speechSynthesis&&window.speechSynthesis.cancel();}catch(e){}
+  $$('.page').forEach(x=>x.classList.toggle('active',x.id===p));
+  $$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.p===p));
+  if(p==='home')renderHome();
+  if(p==='lab')renderLabList();
+  if(p==='test')renderTestMenu();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+$('#nav').addEventListener('click',e=>{const b=e.target.closest('button'); if(b)go(b.dataset.p);});
+
+/* ---- reusable widgets ---- */
+function mcWidget(item,cb,o){
+  o=o||{}; const w=h('div','qwrap'); w.appendChild(h('div','qtext',item.q));
+  const box=h('div','opts'); const fb=h('div','fb'); fb.hidden=true; let done=false;
+  const order=o.shuffle?shuffle(item.opts.map((_,i)=>i)):item.opts.map((_,i)=>i);
+  order.forEach((oi,pos)=>{
+    const b=h('button','opt','<span class="letter">'+'ABCDE'[pos]+'</span><span>'+item.opts[oi]+'</span>'); b.type='button'; b.dataset.oi=oi;
+    b.onclick=()=>{ if(done)return; done=true; const ok=oi===item.a;
+      $$('.opt',box).forEach(x=>{x.disabled=true; const xi=+x.dataset.oi; if(xi===item.a)x.classList.add('correct'); else if(xi===oi)x.classList.add('wrong');});
+      $$('.clue',w).forEach(c=>c.classList.add('show'));
+      fb.hidden=false; fb.className='fb '+(ok?'good':'bad');
+      fb.innerHTML=(ok?'✅ <b>Yes!</b> ':'❌ <b>Not quite.</b> The best answer is in green. ')+(item.why||'');
+      if(cb)cb(ok); };
+    box.appendChild(b); });
+  w.appendChild(box); w.appendChild(fb); return w;
+}
+function evalWrite(q,text){
+  const t=text.toLowerCase().replace(/[“”]/g,'"').replace(/[‘’]/g,"'");
+  const res=q.keys.map(g=>g[0].some(k=>t.indexOf(k)>=0)); const hits=res.filter(Boolean).length;
+  return {res,hits,total:q.keys.length};
+}
+function writeWidget(q,cb){
+  const w=h('div','qwrap'); w.appendChild(h('div','qtext',q.q));
+  w.insertAdjacentHTML('beforeend','<textarea class="wr" placeholder="Write a full sentence. Remember A.C.E.: Answer, Cite, Explain." aria-label="Your answer"></textarea>');
+  const ta=$('textarea',w); const btn=h('button','btn green','✅ Check my answer'); btn.type='button';
+  const out=h('div'); w.appendChild(btn); w.appendChild(out); let done=false;
+  btn.onclick=()=>{
+    if(done)return; if(ta.value.trim().length<4){toast('Write your answer first ✏️');return;}
+    done=true; ta.disabled=true; btn.hidden=true; const r=evalWrite(q,ta.value);
+    const chips=q.labels.map((l,i)=>'<span class="'+(r.res[i]?'y':'n')+'">'+(r.res[i]?'✓ ':'✗ ')+l+'</span>').join('');
+    out.innerHTML='<div class="chips">'+chips+'</div><div class="fb '+(r.hits===r.total?'good':'info')+'">'+(r.hits===r.total?'🌟 Strong answer! You hit every part.':'📝 Compare with the model below, then fix any ✗ part in your own words. (This checker looks for key ideas – always compare with the model too.)')+'</div><div class="model"><b>Model answer:</b><br>'+q.model+'</div>';
+    if(cb)cb(r);
+  };
+  return w;
+}
+function makeMC(q,correct,wrongs,why){ const opts=shuffle([correct].concat(wrongs)); return {q:q,opts:opts,a:opts.indexOf(correct),why:why}; }
+
+/* ---- passage renderer ---- */
+function renderPassage(p){
+  const el=h('div','passage'+(p.poem?' poem':'')); let n=0; const spans=[];
+  el.appendChild(h('div','ptype',p.kind||'Passage')); el.appendChild(h('div','ptitle',p.title));
+  p.text.forEach(block=>{
+    const wrap=h(p.poem?'div':'p',p.poem?'stanza':null);
+    block.forEach((t,j)=>{ const s=h('span',p.poem?'ln':'s'); s.textContent=t; s.dataset.i=n; spans.push({el:s,i:n,text:t}); n++; wrap.appendChild(s); if(!p.poem&&j<block.length-1)wrap.appendChild(document.createTextNode(' ')); });
+    el.appendChild(wrap); });
+  return {el:el,spans:spans};
+}
+function speakBtn(getText){
+  const b=h('button','small-btn','🔊 Read aloud'); b.type='button';
+  if(!('speechSynthesis' in window)){b.hidden=true;return b;}
+  b.onclick=()=>{ const ss=window.speechSynthesis; if(ss.speaking){ss.cancel();b.textContent='🔊 Read aloud';return;}
+    const u=new SpeechSynthesisUtterance(getText()); u.rate=.85; u.onend=()=>{b.textContent='🔊 Read aloud';}; ss.speak(u); b.textContent='⏹ Stop'; };
+  return b;
+}
+const flatText=p=>[].concat.apply([],p.text).join(p.poem?'\n':' ');
+
+/* ================= HOME ================= */
+function renderHome(){
+  const el=$('#home'); const pct=Math.round(S.stars/TOTAL*100);
+  const rows=SKILL_KEYS.map(k=>{ const m=mastery(k); const sk=SKILLS[k];
+    return `<div class="skill-row"><div style="font-size:1.8rem">${sk.em}</div><div><div class="nm">${sk.name}</div><div class="bar"><i style="width:${m==null?0:m}%;background:${m==null?'#ccc':(m>=90?'linear-gradient(90deg,#2b8250,#8fdcae)':m>=70?'linear-gradient(90deg,#c98a12,#f6b73c)':'linear-gradient(90deg,#d9683b,#f0a07f)')}"></i></div></div><div class="pc">${m==null?'new':m+'%'}</div></div>`; }).join('');
+  const rated=SKILL_KEYS.filter(k=>mastery(k)!=null).sort((a,b)=>mastery(a)-mastery(b));
+  let rec='Start with <b>📚 Learn</b>: read a lesson and try its Quick Check. Then play the matching game!';
+  if(rated.length){ const w=rated[0]; rec = mastery(w)>=90 ? '🌟 Every skill you have tried is at 90% or higher! Try a <b>Practice Test</b> to lock it in.' : `Your next mission: boost <b>${SKILLS[w].name}</b> (${mastery(w)}%). Re-read that lesson, then play its game.`; }
+  const names={context:'Context Detective',purpose:'Purpose Sorter',parts:'Story Parts',feelings:'Feelings & Traits',proof:'Proof Finder'};
+  const badges=[];
+  LESSONS.forEach(l=>{ if(S.done['lesson:'+l.id])badges.push(l.em+' '+l.title); });
+  Object.keys(names).forEach(k=>{ if(S.done['drill:'+k])badges.push('🎮 '+names[k]); });
+  if(S.done['drill:affix'])badges.push('🎮 Affix Quest'); if(S.done['memory'])badges.push('🧠 Memory Master');
+  PASSAGES.forEach(p=>{ if(S.done['lab:'+p.id])badges.push(p.em+' '+p.title); });
+  Object.keys(TESTS).forEach(k=>{ if(S.done['test:'+k])badges.push('🏆 '+TESTS[k].title); });
+  el.innerHTML=`
+  <div class="panel">
+    <h2>👋 Welcome to Base Camp!</h2>
+    <div class="mascot"><div class="face">🐆</div><div class="bubble">Hi${S.name?', <b>'+S.name.replace(/</g,'')+'</b>':''}! I'm <b>Zuri</b>, your safari guide. We'll practice the six reading skills from your Mid-Unit 1 review sheet. Learn a skill, play games, read stories, and take practice tests. Every star you earn helps you become a reading champion!</div></div>
+    <p class="noprint">What's your name? <input class="name-in" id="nameIn" maxlength="24" placeholder="Type your name" value="${S.name.replace(/"/g,'&quot;')}"> <button class="btn sun" id="nameSave" style="padding:7px 16px">Save</button></p>
+  </div>
+  <div class="panel">
+    <div class="stats"><div class="stat-big">⭐ ${S.stars} / ${TOTAL} stars</div><div class="level-chip">${levelOf(S.stars)}</div></div>
+    <div class="bar" style="margin:10px 0"><i style="width:${pct}%"></i></div>
+    <div>${badges.map(b=>'<span class="badge">'+b+'</span>').join('')||'<small>Earn badges by finishing lessons, games, passages, and tests!</small>'}</div>
+  </div>
+  <div class="panel">
+    <h2>📊 My Skill Meters</h2>
+    <p style="margin-top:0">Your goal: get every meter to <b>90% or higher</b>. Meters update as you answer questions (they track your most recent 20 answers per skill).</p>
+    ${rows}
+    <div class="fb info">🧭 ${rec}</div>
+  </div>
+  <div class="panel">
+    <h2>🗺️ Your Safari Path</h2>
+    <div class="path">
+      <div class="tile" data-go="learn"><span class="em">📚</span><b>1. Learn</b><small>6 skill lessons + Test-Day Playbook</small></div>
+      <div class="tile" data-go="games"><span class="em">🎮</span><b>2. Play & Drill</b><small>9 games to make skills automatic</small></div>
+      <div class="tile" data-go="lab"><span class="em">📖</span><b>3. Read Passages</b><small>Your review poem &amp; story + new ones</small></div>
+      <div class="tile" data-go="test"><span class="em">🏆</span><b>4. Practice Tests</b><small>Timed-style tests with score reports</small></div>
+    </div>
+  </div>`;
+  $$('.tile',el).forEach(t=>t.onclick=()=>go(t.dataset.go));
+  $('#nameSave',el).onclick=()=>{S.name=$('#nameIn',el).value.trim().slice(0,24);save();renderHome();toast('Saved! 🐆');};
+}
+
+/* ================= LEARN ================= */
+let curLesson='context';
+function refreshLessonTabs(){ $$('#lessonTabs button').forEach(b=>b.classList.toggle('done',!!S.done['lesson:'+b.dataset.l])); }
+function renderLearn(){
+  const el=$('#learn');
+  el.innerHTML='<div class="panel"><h2>📚 Skill Lessons</h2><p style="margin-top:0">Read each lesson, study the example, then try the <b>Quick Check</b> to earn a star.</p><div class="lesson-tabs" id="lessonTabs"></div><div id="lessonBody"></div></div>';
+  const tabs=$('#lessonTabs');
+  LESSONS.forEach(l=>{ const b=h('button',null,l.em+' '+l.title); b.dataset.l=l.id; b.onclick=()=>{curLesson=l.id;showLesson();}; tabs.appendChild(b); });
+  showLesson();
+}
+function showLesson(){
+  const l=LESSONS.filter(x=>x.id===curLesson)[0]; const body=$('#lessonBody');
+  $$('#lessonTabs button').forEach(b=>b.classList.toggle('active',b.dataset.l===curLesson)); refreshLessonTabs();
+  body.innerHTML=`<h3 style="font-size:1.4rem;margin-top:0">${l.em} ${l.title}</h3>
+   <div class="big-idea">${l.big}</div>
+   <h3>How to do it</h3><ol class="steps">${l.steps.map(s=>'<li>'+s+'</li>').join('')}</ol>
+   <div class="example">${l.ex}</div>
+   ${l.trap?'<div class="trap">'+l.trap+'</div>':''}
+   ${l.extra||''}`;
+  const idx=LESSONS.indexOf(l);
+  if(l.check.length){
+    const qb=h('div'); qb.appendChild(h('h3',null,'✅ Quick Check')); body.appendChild(qb);
+    let ans=0,right=0; const res=h('div');
+    l.check.forEach(c=>{ qb.appendChild(mcWidget(c,ok=>{ record(l.skill,ok); ans++; if(ok)right++;
+      if(ans===l.check.length){ if(right>=2){ res.innerHTML='<div class="fb good">🎉 '+right+' / '+ans+' correct – lesson complete!</div>'; earn('lesson:'+l.id,1);} else { res.innerHTML='<div class="fb bad">You got '+right+' / '+ans+'. Re-read the steps above, then try again!</div>'; const r=h('button','btn purple','🔄 Try again'); r.onclick=showLesson; res.appendChild(r);} } },{shuffle:true})); });
+    qb.appendChild(res);
+  } else {
+    const b=h('button','btn green','🛡️ I\'m ready for test day!'); b.onclick=()=>{earn('lesson:playbook',1);toast('Playbook learned! 🛡️');}; const c=h('div','center'); c.appendChild(b); body.appendChild(c);
+  }
+  const nav=h('div','center'); nav.style.marginTop='16px';
+  if(idx<LESSONS.length-1){ const nb=h('button','btn blue','Next lesson →'); nb.onclick=()=>{curLesson=LESSONS[idx+1].id;showLesson();window.scrollTo({top:0,behavior:'smooth'});}; nav.appendChild(nb);} else { const gb=h('button','btn blue','🎮 Go play the games →'); gb.onclick=()=>go('games'); nav.appendChild(gb);}
+  body.appendChild(nav);
+}
+
+/* ================= GAMES ================= */
+const GAME_TABS=[['context','🔎 Context Detective'],['affixq','🧩 Affix Quest'],['wordlab','🧪 Word Lab'],['purpose','🎯 Purpose Sorter'],['parts','🏔️ Story Parts'],['order','🔢 Story Order'],['feelings','💭 Feelings & Traits'],['proof','📍 Proof Finder'],['memory','🧠 Affix Memory']];
+let curGame='context';
+function renderGames(){
+  const el=$('#games'); el.innerHTML='<div class="panel"><h2>🎮 Skill Games</h2><div class="game-tabs" id="gameTabs"></div><div id="gameHost"></div></div>';
+  GAME_TABS.forEach(g=>{ const b=h('button',null,g[1]); b.dataset.g=g[0]; b.onclick=()=>{curGame=g[0];openGame();}; $('#gameTabs').appendChild(b); });
+  openGame();
+}
+function openGame(){
+  $$('#gameTabs button').forEach(b=>b.classList.toggle('active',b.dataset.g===curGame));
+  const host=$('#gameHost'); host.innerHTML='';
+  if(DRILLS[curGame]) return runDrill(host,curGame,DRILLS[curGame].items,DRILLS[curGame]);
+  if(curGame==='affixq') return runDrill(host,'affix',affixItems(),{title:'Affix Quest',skill:'affix',desc:'Break each word into parts and find its meaning.',regen:affixItems});
+  if(curGame==='wordlab') return wordLab(host);
+  if(curGame==='order') return orderGame(host);
+  if(curGame==='memory') return memoryGame(host);
+}
+function runDrill(host,key,items,cfg){
+  const count=Math.min(10,items.length); const pool=shuffle(items).slice(0,count); let i=0,right=0;
+  function step(){
+    host.innerHTML='';
+    if(i>=count){ const pct=Math.round(right/count*100);
+      host.innerHTML=`<div class="center"><div style="font-size:4rem">${pct>=80?'🏆':'🌱'}</div><h3>${pct>=80?'Fantastic work!':'Good practice – let\'s go again!'}</h3><p style="font-size:1.3rem">You scored <b>${right} / ${count}</b> (${pct}%)</p>${pct>=80?'<p>Score 80% or more to earn the star – you did it!</p>':'<p>Aim for 80% or more to earn the star. Read the lesson again and replay!</p>'}</div>`;
+      if(pct>=80)earn('drill:'+key,3);
+      const again=h('button','btn green','🔄 Play again'); again.onclick=()=>{ if(cfg.regen){ runDrill(host,key,cfg.regen(),cfg);} else runDrill(host,key,items,cfg); };
+      const c=h('div','center'); c.appendChild(again); host.appendChild(c); return; }
+    host.appendChild(h('h3',null,(cfg.em||'')+' '+cfg.title)); host.appendChild(h('p',null,'<i>'+cfg.desc+'</i>'));
+    const sb=h('div','scorebar','<span>Question '+(i+1)+' of '+count+'</span><span>✅ Correct so far: '+right+'</span>'); host.appendChild(sb);
+    const bar=h('div','bar'); bar.innerHTML='<i style="width:'+Math.round(i/count*100)+'%"></i>'; host.appendChild(bar);
+    const nxt=h('button','btn blue',i===count-1?'See my score ➡':'Next ➡'); nxt.hidden=true; nxt.onclick=()=>{i++;step();};
+    host.appendChild(mcWidget(pool[i],ok=>{ record(cfg.skill,ok); if(ok)right++; sb.innerHTML='<span>Question '+(i+1)+' of '+count+'</span><span>✅ Correct so far: '+right+'</span>'; nxt.hidden=false; nxt.focus(); },{shuffle:key==='context'||key==='proof'||key==='feelings'}));
+    const c=h('div'); c.style.textAlign='right'; c.appendChild(nxt); host.appendChild(c);
+  }
+  step();
+}
+function affixItems(){
+  const out=[]; const words=shuffle(AFFIX_WORDS).slice(0,12);
+  const meaningsAll=Array.from(new Set(Object.keys(AFFIX_MEANINGS).map(k=>AFFIX_MEANINGS[k])));
+  words.forEach((w,i)=>{
+    const parts=w.aff.charAt(0)==='-'?'<span class="root">'+w.root+'</span><span class="suf">'+w.aff+'</span>':'<span class="pre">'+w.aff+'</span><span class="root">'+w.root+'</span>';
+    if(i%3===2){ const cor=AFFIX_MEANINGS[w.aff]; const wr=shuffle(meaningsAll.filter(m=>m!==cor)).slice(0,2);
+      out.push(makeMC('What does <b>'+w.aff+'</b> mean in the word <b>'+w.w+'</b>?',cor,wr,parts+' → '+w.aff+' means <b>'+cor+'</b>.')); }
+    else { const wr=shuffle(AFFIX_WORDS.filter(x=>x.m!==w.m)).map(x=>x.m).filter((m,j,a)=>a.indexOf(m)===j).slice(0,2);
+      out.push(makeMC('What does <b>'+w.w+'</b> mean?',w.m,wr,parts+' → <b>'+w.m+'</b>.'+(w.note?' ('+w.note+')':''))); }
+  });
+  return out;
+}
+function wordLab(host){
+  host.innerHTML='<h3>🧪 Word Lab</h3><p>Build new words! First pick an <b>affix</b>, then pick a <b>root word</b>.</p><div class="chips-pick" id="wlAff"></div><div class="chips-pick" id="wlRoot"></div><div class="lab-out" id="wlOut"><span style="opacity:.6">Your new word will appear here ✨</span></div>';
+  let aff=null; const affBox=$('#wlAff'), rootBox=$('#wlRoot'), out=$('#wlOut');
+  Object.keys(AFFIX_MEANINGS).forEach(a=>{ const b=h('button',null,a+' <small>('+AFFIX_MEANINGS[a]+')</small>'); b.onclick=()=>{ aff=a; $$('button',affBox).forEach(x=>x.classList.remove('on')); b.classList.add('on');
+      rootBox.innerHTML=''; out.innerHTML='<span style="opacity:.6">Now pick a root word 👆</span>';
+      AFFIX_WORDS.filter(w=>w.aff===a).forEach(w=>{ const r=h('button',null,w.root); r.onclick=()=>{ $$('button',rootBox).forEach(x=>x.classList.remove('on')); r.classList.add('on');
+        const parts=a.charAt(0)==='-'?'<span class="root">'+w.root+'</span> + <span class="suf">'+a+'</span>':'<span class="pre">'+a+'</span> + <span class="root">'+w.root+'</span>';
+        out.innerHTML='<div class="big">'+parts+' = <span style="color:var(--jungle-d)">'+w.w+'</span></div><p style="margin:6px 0 0">Meaning: <b>'+w.m+'</b>'+(w.note?'<br><small>✏️ Spelling note: '+w.note+'</small>':'')+'</p>'; }; rootBox.appendChild(r); }); };
+    affBox.appendChild(b); });
+}
+function orderGame(host){
+  host.innerHTML='<h3>🔢 Story Order</h3><p>Choose a story. Use ▲ ▼ to put the events in the correct order, from first to last.</p><div class="chips-pick" id="ordPick"></div><div id="ordBody"></div>';
+  Object.keys(ORDERS).forEach(k=>{ const b=h('button',null,ORDERS[k].title); b.onclick=()=>{ $$('button',$('#ordPick')).forEach(x=>x.classList.remove('on')); b.classList.add('on'); startOrder(k); }; $('#ordPick').appendChild(b); });
+  function startOrder(k){
+    const ev=ORDERS[k].events; let list=shuffle(ev.map((t,i)=>({t:t,i:i}))); const body=$('#ordBody');
+    while(list.every((x,j)=>x.i===j))list=shuffle(list);
+    function draw(chk){ body.innerHTML=''; const ul=h('ul','ord');
+      list.forEach((x,j)=>{ const li=h('li',chk?(x.i===j?'good':'bad'):''); li.innerHTML='<span class="n">'+(j+1)+'</span><span class="tx">'+x.t+'</span>';
+        const mv=h('span','mv'); const up=h('button',null,'▲'),dn=h('button',null,'▼'); up.setAttribute('aria-label','Move up'); dn.setAttribute('aria-label','Move down');
+        up.onclick=()=>{ if(j>0){const t=list[j];list[j]=list[j-1];list[j-1]=t;draw();} }; dn.onclick=()=>{ if(j<list.length-1){const t=list[j];list[j]=list[j+1];list[j+1]=t;draw();} };
+        mv.appendChild(up);mv.appendChild(dn);li.appendChild(mv);ul.appendChild(li); }); body.appendChild(ul);
+      const c=h('div','center'); const ck=h('button','btn green','✅ Check my order'); const sh=h('button','btn purple','🔀 Shuffle again'); c.appendChild(ck);c.appendChild(sh); body.appendChild(c);
+      const fb=h('div','fb'); fb.hidden=true; body.appendChild(fb);
+      ck.onclick=()=>{ const ok=list.every((x,j)=>x.i===j); record('story',ok); draw(true); const f=$('.fb',body); f.hidden=false; f.className='fb '+(ok?'good':'bad');
+        f.innerHTML=ok?'🎉 Perfect order! Notice how the problem comes first and the solution comes last.':'Not yet – red steps are in the wrong spot. Think: what happens first? What fixes the problem at the end?'; if(ok)earn('order:'+k,2); };
+      sh.onclick=()=>startOrder(k);
+    }
+    draw();
+  }
+}
+function memoryGame(host){
+  const pairs=[['re-','again / back'],['un-','not / opposite'],['pre-','before'],['mis-','wrongly'],['-ful','full of'],['-less','without'],['-ly','in a ___ way'],['-ness','state of being']];
+  let deck=[]; pairs.forEach((p,i)=>{deck.push({k:i,t:p[0]});deck.push({k:i,t:p[1]});}); deck=shuffle(deck);
+  let open=[],lock=false,found=0,tries=0;
+  host.innerHTML='<h3>🧠 Affix Memory</h3><p>Flip two cards. Match each <b>affix</b> with its <b>meaning</b>!</p><div class="scorebar" id="memS"></div><div class="mem-grid" id="memG"></div><div class="center" style="margin-top:12px"><button class="btn purple" id="memR">🔄 New game</button></div>';
+  const stat=()=>{$('#memS').innerHTML='<span>Tries: '+tries+'</span><span>Pairs: '+found+' / '+pairs.length+'</span>';}; stat();
+  deck.forEach((c,idx)=>{ const d=h('div','mem','?'); d.tabIndex=0;
+    const flip=()=>{ if(lock||d.classList.contains('up')||d.classList.contains('ok'))return; d.classList.add('up'); d.textContent=c.t; open.push({d:d,c:c});
+      if(open.length===2){ lock=true; tries++; const a=open[0],b=open[1];
+        setTimeout(()=>{ if(a.c.k===b.c.k){ a.d.classList.add('ok');b.d.classList.add('ok');found++; record('affix',true); if(found===pairs.length){ earn('memory',3); toast('All pairs found! 🎉'); } }
+          else { a.d.classList.remove('up');b.d.classList.remove('up');a.d.textContent='?';b.d.textContent='?'; record('affix',false);} open=[];lock=false;stat(); },750); } };
+    d.onclick=flip; d.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip();}}; $('#memG').appendChild(d); });
+  $('#memR').onclick=()=>memoryGame(host);
+}
+
+/* ================= PASSAGE LAB ================= */
+function renderLabList(){
+  const el=$('#lab'); el.innerHTML='<div class="panel"><h2>📖 Reading Passages</h2><p style="margin-top:0">Read each text carefully (twice!), then answer the questions. Some questions ask you to <b>click the exact line</b> that proves your answer. The first two passages are from <b>your review sheet</b>.</p><div class="lab-list" id="labGrid"></div></div>';
+  PASSAGES.forEach(p=>{ const c=h('div','pcard'+(S.done['lab:'+p.id]?' done':''),'<span class="em">'+p.em+'</span><b>'+p.title+'</b><small>'+p.kind+(p.from?' • <b style="color:var(--berry)">'+p.from+'</b>':'')+' • '+p.qs.length+' questions'+(S.done['lab:'+p.id]?' • ✅ done':'')+'</small>'); c.onclick=()=>openPassage(p); $('#labGrid').appendChild(c); });
+}
+function openPassage(p){
+  const host=$('#lab'); host.innerHTML=''; window.scrollTo({top:0});
+  const top=h('div','panel'); host.appendChild(top);
+  const back=h('button','small-btn','← All passages'); back.onclick=renderLabList; top.appendChild(back);
+  top.appendChild(h('h2',null,p.em+' '+p.title)); top.querySelector('h2').style.marginTop='10px';
+  const tools=h('div','passage-tools'); tools.appendChild(speakBtn(()=>p.title+'. '+flatText(p))); top.appendChild(tools);
+  const P=renderPassage(p); top.appendChild(P.el);
+  const pick={on:false,sel:null};
+  P.spans.forEach(s=>{ s.el.onclick=()=>{ if(!pick.on)return; P.spans.forEach(x=>x.el.classList.remove('picked')); pick.sel=s.i; s.el.classList.add('picked'); }; });
+  const qpanel=h('div','panel'); host.appendChild(qpanel);
+  let qi=0,right=0;
+  function clearMarks(){ P.spans.forEach(x=>x.el.classList.remove('picked','right-line','wrong-line')); P.el.classList.remove('pick'); pick.on=false; pick.sel=null; }
+  function show(){
+    qpanel.innerHTML=''; clearMarks();
+    if(qi>=p.qs.length){ return finish(); }
+    const q=p.qs[qi];
+    qpanel.appendChild(h('div','stepper','<b>Question '+(qi+1)+' of '+p.qs.length+'</b><span><span class="pill">'+SKILLS[q.skill].em+' '+SKILLS[q.skill].name.split(' (')[0]+'</span><span class="lvl lvl'+q.level+'">'+['','Cub','Hunter','Champion'][q.level]+'</span></span>'));
+    const nxt=h('button','btn blue',qi===p.qs.length-1?'Finish ➡':'Next ➡'); nxt.hidden=true; nxt.onclick=()=>{qi++;show();};
+    if(q.type==='mc'){ qpanel.appendChild(mcWidget(q,ok=>{record(q.skill,ok);if(ok)right++;nxt.hidden=false;},{shuffle:true})); }
+    else if(q.type==='write'){ qpanel.appendChild(writeWidget(q,r=>{const ok=r.hits===r.total; record(q.skill,r.hits/r.total>=.67); if(ok)right++; nxt.hidden=false;})); }
+    else if(q.type==='line'){
+      pick.on=true; P.el.classList.add('pick');
+      const w=h('div','qwrap'); w.appendChild(h('div','qtext',q.q)); w.appendChild(h('p',null,'👆 <i>Tap a line in the passage above, then press Check.</i>'));
+      const up=h('button','small-btn','⬆ Jump to passage'); up.onclick=()=>P.el.scrollIntoView({behavior:'smooth',block:'start'});
+      const ck=h('button','btn green','✅ Check my line'); const fb=h('div','fb'); fb.hidden=true;
+      ck.onclick=()=>{ if(pick.sel==null){toast('Tap a line in the passage first 👆');return;}
+        const ok=q.lines.indexOf(pick.sel)>=0; pick.on=false; P.el.classList.remove('pick'); ck.hidden=true;
+        q.lines.forEach(i=>P.spans[i].el.classList.add('right-line')); if(!ok){P.spans[pick.sel].el.classList.remove('picked');P.spans[pick.sel].el.classList.add('wrong-line');}
+        fb.hidden=false; fb.className='fb '+(ok?'good':'bad'); fb.innerHTML=(ok?'✅ <b>Yes!</b> ':'❌ <b>Not quite.</b> The best proof is highlighted in green. ')+q.why; record(q.skill,ok); if(ok)right++; nxt.hidden=false; };
+      w.appendChild(up); w.appendChild(ck); w.appendChild(fb); qpanel.appendChild(w);
+    }
+    const c=h('div'); c.style.textAlign='right'; c.appendChild(nxt); qpanel.appendChild(c);
+  }
+  function finish(){
+    const n=p.qs.length,pct=Math.round(right/n*100);
+    qpanel.innerHTML=`<div class="center"><div style="font-size:4rem">${pct>=70?'🏆':'🌱'}</div><h3>${pct>=90?'Amazing reading!':pct>=70?'Great job!':'Good try – read again and retry!'}</h3><p style="font-size:1.3rem">Score: <b>${right} / ${n}</b> (${pct}%)</p>${pct>=70?'':'<p>Score 70% or more to earn the star.</p>'}</div>`;
+    if(pct>=70)earn('lab:'+p.id,3);
+    const c=h('div','center'); const again=h('button','btn green','🔄 Try again'); again.onclick=()=>openPassage(p);
+    const list=h('button','btn blue','📖 All passages'); list.onclick=renderLabList;
+    const idx=PASSAGES.indexOf(p); c.appendChild(again); c.appendChild(list);
+    if(idx<PASSAGES.length-1){ const nx=h('button','btn','Next passage ➡'); nx.onclick=()=>openPassage(PASSAGES[idx+1]); c.appendChild(nx); }
+    qpanel.appendChild(c); P.el.scrollIntoView({block:'start'});
+  }
+  show();
+}
+
+/* ================= PRACTICE TESTS ================= */
+let TS=null;
+function renderTestMenu(){
+  const el=$('#test'); TS=null;
+  el.innerHTML=`<div class="panel"><h2>🏆 Practice Tests</h2>
+  <p style="margin-top:0">Each test has a poem and a story with multiple-choice and written questions, just like the real assessment. Answers are revealed <b>after</b> you submit. Take your time – read each passage twice!</p>
+  <div class="fb info">🎯 <b>Mastery goal:</b> 90% or higher on both tests. Missed a question? Read the explanation, then replay the matching game.</div>
+  <div class="lab-list" id="testGrid" style="margin-top:14px"></div></div>`;
+  Object.keys(TESTS).forEach(k=>{ const t=TESTS[k]; const best=S.best[k]; const nq=t.parts.reduce((a,p)=>a+p.qs.length,0);
+    const c=h('div','pcard'+(S.done['test:'+k]?' done':''),'<span class="em">'+t.em+'</span><b>'+t.title+'</b><small>'+t.parts.map(p=>p.title).join(' + ')+'<br>'+nq+' questions'+(best!=null?' • Best: <b>'+best+'%</b>':'')+'</small>'); c.onclick=()=>startTest(k); $('#testGrid').appendChild(c); });
+}
+function startTest(k){
+  const t=TESTS[k];
+  const parts=t.parts.map((p,pi)=>({p:p,qs:p.qs.map((q,qi)=>{ if(q.type==='write')return Object.assign({uid:pi+'-'+qi},q); const order=shuffle(q.opts.map((_,i)=>i)); return Object.assign({},q,{uid:pi+'-'+qi,opts:order.map(i=>q.opts[i]),a:order.indexOf(q.a)}); })}));
+  TS={k:k,parts:parts,part:0,ans:{},start:Date.now()}; drawTest();
+}
+function drawTest(){
+  const el=$('#test'); const T=TS; const t=TESTS[T.k]; const pt=T.parts[T.part]; el.innerHTML=''; window.scrollTo({top:0});
+  const head=h('div','panel'); head.innerHTML='<div class="stepper"><h2 style="margin:0">'+t.em+' '+t.title+'</h2><span class="pill">Part '+(T.part+1)+' of '+T.parts.length+'</span></div>'; el.appendChild(head);
+  const tools=h('div','passage-tools'); tools.appendChild(speakBtn(()=>pt.p.title+'. '+flatText(pt.p))); head.appendChild(tools);
+  head.appendChild(renderPassage(pt.p).el);
+  const qp=h('div','panel'); el.appendChild(qp);
+  pt.qs.forEach((q,i)=>{ const card=h('div','test-card'); card.appendChild(h('div','qtext',(i+1)+'. '+q.q));
+    if(q.type==='write'){ const ta=h('textarea','wr'); ta.placeholder='Write a full answer. Use A.C.E.: Answer, Cite, Explain.'; ta.value=T.ans[q.uid]||''; ta.oninput=()=>{T.ans[q.uid]=ta.value;}; card.appendChild(ta); }
+    else { const box=h('div','opts'); q.opts.forEach((o,oi)=>{ const b=h('button','opt'+(T.ans[q.uid]===oi?' sel':''),'<span class="letter">'+'ABCDE'[oi]+'</span><span>'+o+'</span>'); b.type='button';
+      b.onclick=()=>{T.ans[q.uid]=oi; $$('.opt',box).forEach(x=>x.classList.remove('sel')); b.classList.add('sel');}; box.appendChild(b); }); card.appendChild(box); }
+    qp.appendChild(card); });
+  const nav=h('div','center');
+  if(T.part>0){ const b=h('button','btn purple','⬅ Back'); b.onclick=()=>{T.part--;drawTest();}; nav.appendChild(b); }
+  if(T.part<T.parts.length-1){ const b=h('button','btn blue','Next part ➡'); b.onclick=()=>{T.part++;drawTest();}; nav.appendChild(b); }
+  else { const b=h('button','btn green','📝 Submit my test'); b.onclick=submitTest; nav.appendChild(b); }
+  const q=h('button','btn','Quit'); q.onclick=()=>{ if(confirm('Leave this test? Your answers will be lost.'))renderTestMenu(); }; nav.appendChild(q);
+  qp.appendChild(nav);
+}
+function submitTest(){
+  const T=TS; const all=[]; T.parts.forEach(p=>p.qs.forEach(q=>all.push(q)));
+  const unanswered=all.filter(q=>q.type==='write'?!(T.ans[q.uid]||'').trim():T.ans[q.uid]==null).length;
+  if(unanswered&&!confirm(unanswered+' question(s) are unanswered. Submit anyway?'))return;
+  let score=0; const by={}; const items=[];
+  all.forEach(q=>{ let pts=0,detail='';
+    if(q.type==='write'){ const txt=(T.ans[q.uid]||''); const r=txt.trim()?evalWrite(q,txt):{res:q.keys.map(()=>false),hits:0,total:q.keys.length}; pts=r.hits/r.total; detail={r:r,txt:txt}; }
+    else { pts=T.ans[q.uid]===q.a?1:0; detail=T.ans[q.uid]; }
+    score+=pts; by[q.skill]=by[q.skill]||{p:0,n:0}; by[q.skill].p+=pts; by[q.skill].n++; record(q.skill,pts>=.67); items.push({q:q,pts:pts,detail:detail}); });
+  const pct=Math.round(score/all.length*100); if(S.best[T.k]==null||pct>S.best[T.k]){S.best[T.k]=pct;save();}
+  if(pct>=80)earn('test:'+T.k,5);
+  const mins=Math.max(1,Math.round((Date.now()-T.start)/60000)); const t=TESTS[T.k];
+  const el=$('#test'); el.innerHTML=''; window.scrollTo({top:0});
+  const msg=pct>=95?'🌟 Superstar accuracy! This is exactly the level to aim for.':pct>=90?'🎉 Excellent! Mastery level.':pct>=80?'👏 Great work – a little polishing and you\'ll be at mastery.':pct>=60?'💪 Good start. Study the explanations and the lessons for any ✗ skill, then retake.':'🌱 Keep going! Re-read the lessons, play the games, then try again.';
+  const sum=h('div','panel'); sum.innerHTML=`<h2>${t.em} ${t.title} – Results</h2><div class="center"><div style="font-size:3.4rem;font-weight:bold;color:var(--jungle-d)">${pct}%</div><p style="font-size:1.2rem"><b>${Math.round(score*10)/10} / ${all.length}</b> points • about ${mins} min</p><div class="fb ${pct>=80?'good':'info'}">${msg}</div></div>
+   <h3>Skill report</h3><div class="result-grid">${Object.keys(by).map(k=>{const b=by[k];const pc=Math.round(b.p/b.n*100);return '<div class="res"><div style="font-size:1.6rem">'+SKILLS[k].em+'</div><small>'+SKILLS[k].name.split(' (')[0]+'</small><b style="color:'+(pc>=90?'#2b8250':pc>=60?'#c98a12':'#d6453d')+'">'+pc+'%</b><small>'+(pc>=90?'Mastered':pc>=60?'Almost there':'Review this skill')+'</small></div>';}).join('')}</div>`;
+  el.appendChild(sum);
+  if(pct>=90){ const nm=(S.name||'Super Reader').replace(/</g,''); const c=h('div','cert','<h2>🏆 Certificate of Reading Mastery</h2><p>This certifies that</p><div class="nm">'+nm+'</div><p>scored <b>'+pct+'%</b> on <b>'+t.title+'</b><br>Story Safari – Grade 3 Reading Mastery Camp</p><div style="font-size:2rem">🐆 🦎 🦉 ⭐</div>'); el.appendChild(c); confetti(30); }
+  const rv=h('div','panel'); rv.appendChild(h('h2',null,'🔍 Review every question'));
+  items.forEach((it,i)=>{ const q=it.q; const c=h('div','test-card');
+    if(q.type==='write'){ const r=it.detail.r; c.innerHTML='<div class="qtext">'+(i+1)+'. '+q.q+'</div><p><b>Your answer:</b> '+(it.detail.txt.trim()?it.detail.txt.replace(/</g,'&lt;'):'<i>(blank)</i>')+'</p><div class="chips">'+q.labels.map((l,j)=>'<span class="'+(r.res[j]?'y':'n')+'">'+(r.res[j]?'✓ ':'✗ ')+l+'</span>').join('')+'</div><div class="model"><b>Model answer:</b><br>'+q.model+'</div>'; }
+    else { const ok=it.pts===1; c.innerHTML='<div class="qtext">'+(i+1)+'. '+q.q+'</div><p>'+(ok?'✅':'❌')+' <b>Your answer:</b> '+(it.detail==null?'<i>(none)</i>':q.opts[it.detail])+'</p>'+(ok?'':'<p><b>Correct answer:</b> '+q.opts[q.a]+'</p>')+'<div class="fb info">💡 '+q.why+'</div>'; }
+    rv.appendChild(c); });
+  const nav=h('div','center'); const again=h('button','btn green','🔄 Retake this test'); again.onclick=()=>startTest(T.k); const menu=h('button','btn blue','🏆 All tests'); menu.onclick=renderTestMenu; const pr=h('button','btn purple','🖨️ Print'); pr.onclick=()=>window.print(); nav.appendChild(again); nav.appendChild(menu); nav.appendChild(pr); rv.appendChild(nav); el.appendChild(rv);
+}
+
+/* ================= PARENT PAGE ================= */
+function renderParent(){
+  $('#parent').innerHTML=`
+  <div class="panel"><h2>👨‍👩‍👧 Parent &amp; Teacher Page</h2>
+  <p>This site is practice for the six skills listed on your child's <b>Mid-Unit 1 Assessment review sheet</b>. All lessons, passages, and questions here are original practice material written to match those skills. It is not the official assessment, and no practice tool can promise a particular score or percentile; steady daily practice and talking about answers are what build mastery. Progress saves in this browser on this device.</p>
+  <button class="btn purple noprint" onclick="window.print()">🖨️ Print this page</button></div>
+
+  <div class="panel"><h2>The six skills</h2>
+  <table class="tbl"><tr><th>Skill on the review sheet</th><th>Where to practice</th></tr>
+  <tr><td>Meaning of unknown words using context clues</td><td>Lesson 1 • Context Detective • Word-meaning questions in passages</td></tr>
+  <tr><td>Purpose of a text (text types)</td><td>Lesson 2 • Purpose Sorter • “What is the purpose?” questions</td></tr>
+  <tr><td>Characters, setting, and plot of a narrative</td><td>Lesson 3 • Story Parts • Story Order</td></tr>
+  <tr><td>Affixes (prefixes and suffixes)</td><td>Lesson 4 • Affix Quest • Word Lab • Affix Memory</td></tr>
+  <tr><td>Characters' thoughts, feelings, and actions</td><td>Lesson 5 • Feelings &amp; Traits</td></tr>
+  <tr><td>Identifying the line that gave the answer</td><td>Lesson 6 • Proof Finder • “Click the line” questions</td></tr></table></div>
+
+  <div class="panel"><h2>Your review sheet: answers &amp; coaching notes</h2>
+  <table class="tbl"><tr><th>Item</th><th>Best answer</th><th>Notes</th></tr>
+  <tr><td>Poem Q1</td><td>(a) Chameleons change colors</td><td>Matches the circled choice.</td></tr>
+  <tr><td>Poem Q2</td><td>(b) “Sometimes you’re yellow / Then you’re green.”</td><td>Matches the circled choice.</td></tr>
+  <tr><td>Poem Q3</td><td>(b) The color</td><td>Matches the circled choice. Tangerine appears in a list of colors.</td></tr>
+  <tr><td>Story Q1 (written)</td><td>The leopard is tired of being a plain cat and wants to be special like the other jungle animals (and cites the text).</td><td>The handwritten answer (“wanted to have design”) is on the right track but vague and has no text evidence. Practice the A.C.E. model in Lesson 6.</td></tr>
+  <tr><td>Story Q2</td><td><b>(c)</b> The leopard talks to the sun and the sun gives the leopard spots.</td><td><b>Worth a second look.</b> On the scanned copy, choice (b) (the turtle sends him on a journey) is circled. The turtle’s advice is an <i>event</i>; what actually fixes the problem is the sun’s heat leaving spots. Ask the teacher to confirm, and use the “advice is not the solution” tip in Lesson 3.</td></tr>
+  <tr><td>Story Q3</td><td>(b) Answer the pourquoi question</td><td>Matches the circled choice. “Patience” is the lesson, not the purpose.</td></tr>
+  <tr><td>Story Q4</td><td>(b) He felt proud of his spots</td><td>Matches the circled choice.</td></tr>
+  <tr><td>Story Q5 (written)</td><td>Reread means to read again.</td><td>Handwritten answer (“going back to the text”) is close in spirit; the target word is <b>again</b>.</td></tr>
+  <tr><td>Story Q6 (written)</td><td>Peacefully means in a calm and gentle way.</td><td>Handwritten answer describes feelings (“calm and happy and gentle”). Teach the <b>-ly = in a ___ way</b> pattern.</td></tr></table>
+  <p><small>Note: the scan does not make clear whether circles are the student's answers or an answer key, so please compare against the text yourself.</small></p></div>
+
+  <div class="panel"><h2>A 14-day plan (15–20 minutes a day)</h2>
+  <table class="tbl"><tr><th>Day</th><th>Do this</th></tr>
+  <tr><td>1–2</td><td>Lessons 1 &amp; 2, then Context Detective and Purpose Sorter</td></tr>
+  <tr><td>3–4</td><td>Lessons 3 &amp; 4, then Story Parts, Story Order, Affix Quest, Word Lab</td></tr>
+  <tr><td>5</td><td>Lessons 5 &amp; 6, then Feelings &amp; Traits and Proof Finder</td></tr>
+  <tr><td>6–7</td><td>Passages: The Chameleon, How the Leopard Got Its Spots (from the review sheet)</td></tr>
+  <tr><td>8–9</td><td>New passages; replay the game for the lowest skill meter</td></tr>
+  <tr><td>10</td><td>Practice Test A. Read every explanation afterward.</td></tr>
+  <tr><td>11–12</td><td>Replay missed skills; practice written answers with A.C.E. out loud</td></tr>
+  <tr><td>13</td><td>Practice Test B</td></tr>
+  <tr><td>14</td><td>Test-Day Playbook, light review, an early bedtime</td></tr></table></div>
+
+  <div class="panel"><h2>Coaching tips that work</h2>
+  <p><b>Ask “How do you know?”</b> after every answer. Have her point to the exact words. This is the habit that separates high scorers.</p>
+  <p><b>Read passages twice</b>, once for the story and once for details. Use 🔊 Read aloud if she is tired, but have her read aloud to you too.</p>
+  <p><b>Celebrate mistakes</b> as clues: “Which trap did that answer set?” (true-but-wrong, too small, opposite, real-life memory).</p>
+  <p><b>Mastery target:</b> every Skill Meter at 90% or higher on two different days, and 90% or higher on both practice tests.</p>
+  <button class="btn noprint" id="resetBtn" style="background:#999;box-shadow:0 4px 0 #666">Reset all progress</button></div>`;
+  $('#resetBtn').onclick=()=>{ if(confirm('Erase all stars, badges, and scores on this device?')){ S=def(); SKILL_KEYS.forEach(k=>S.hist[k]=[]); save(); renderHome(); toast('Progress reset'); } };
+}
+
+/* ---- init ---- */
+renderLearn(); renderGames(); renderLabList(); renderTestMenu(); renderParent(); renderHome();
+window.addEventListener('beforeprint',()=>{ const a=$('.page.active'); if(a)a.classList.add('printme'); });
+window.addEventListener('afterprint',()=>{ $$('.printme').forEach(x=>x.classList.remove('printme')); });
+})();
+</script>
+</body>
+</html>
